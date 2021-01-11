@@ -35,7 +35,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => {
       if (s !== null && s !== undefined) {
-        s.unsubscribe()
+        s.unsubscribe();
       }
     });
     if(this.frameScrollSubscription !== null && this.frameScrollSubscription !== undefined) {

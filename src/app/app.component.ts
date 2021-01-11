@@ -1,6 +1,7 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { fromEvent, Subscription } from 'rxjs';
 import { Constants } from './classes/constants';
 import { UrlGenerator } from './classes/url-generator';
 import { ItemContainerComponent } from './item-container/item-container.component';
@@ -12,7 +13,7 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
@@ -73,12 +74,23 @@ export class AppComponent implements OnInit {
   url: any;
   frameWidth = '100%';
 
+  private subscriptions: Subscription[] = [];
+
   constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService) {
   }
 
   ngOnInit() {
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
     //console.log(this.url);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => {
+      if (s !== null && s !== undefined) {
+        console.log(s);
+        s.unsubscribe();
+      }
+    });
   }
 
   openDialog(params: any) {
@@ -119,6 +131,41 @@ export class AppComponent implements OnInit {
     }));
   }
 
+  private prepareElement(e: HTMLElement, frameContentWindow: any, compRef: ComponentRef<ItemContainerComponent>, event: Event) {
+    let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
+    cData.forEach((eC: HTMLElement) => {
+      if (eC !== e) {
+        eC.style.border = 'none';
+      }
+    });
+    e.style.outlineOffset = '4px';
+    e.style.border = '2px solid rgb(244, 124, 0)';
+
+    let currentElement = event.target as HTMLElement;
+    if (currentElement !== null && currentElement !== undefined) {
+      let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
+      if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
+        const objElement = JSON.parse(jsonDataElement);
+        if (objElement !== null && objElement !== undefined) {
+          compRef.instance.changeElement(objElement, currentElement);
+          compRef.changeDetectorRef.detectChanges();
+        }
+      } else {
+        let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
+        if (closestElement !== null && closestElement !== undefined) {
+          let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
+          if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
+            const objElement = JSON.parse(jsonDataElement);
+            if (objElement !== null && objElement !== undefined) {
+              compRef.instance.changeElement(objElement, closestElement);
+              compRef.changeDetectorRef.detectChanges();
+            }
+          }
+        }
+      }
+    }
+  }
+
   scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
 
     if (objLabels !== null && objLabels !== undefined) {
@@ -150,70 +197,35 @@ export class AppComponent implements OnInit {
                 if (parentNode !== null) {
                   parentNode.style.minHeight = '50px';
                   parentNode.classList.add('alpdeskfee-article-container');
-                  /*parentNode.onmouseover = function (event) {
-                    if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.outline = '2px dashed rgb(244, 124, 0)';
-                    }
-                  };
-                  parentNode.onmouseout = function () {
-                    if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.outline = '0px dashed rgb(244, 124, 0)';
-                    }
-                  };*/
-                  parentNode.onclick = function () {
+                  const parentClick$ = fromEvent<MouseEvent>(parentNode, "click").subscribe((event: Event) => {
                     if (parentNode !== null) {
                       compRef.instance.changeParent(obj, parentNode);
                       compRef.changeDetectorRef.detectChanges();
-                      //parentNode.style.outlineOffset = '4px';
-                      //parentNode.style.borderLeft = '2px solid rgb(244, 124, 0)';
                     }
-                  };
+                  });
+                  this.subscriptions.push(parentClick$);
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
-                e.onmouseover = function () {
+                const elementMouseover$ = fromEvent<MouseEvent>(e, "mouseover").subscribe((event: Event) => {
                   e.style.outline = '2px dashed rgb(244, 124, 0)';
                   e.style.outlineOffset = '2px';
-                };
-                e.onmouseout = function () {
+                });
+                this.subscriptions.push(elementMouseover$);
+                const elementMouseout$ = fromEvent<MouseEvent>(e, "mouseout").subscribe((event: Event) => {
                   e.style.outline = '0px dashed rgb(244, 124, 0)';
                   e.style.outlineOffset = '0px';
-                };
-                e.onclick = function (event: Event) {
-
-                  let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
-                  cData.forEach((eC: HTMLElement) => {
-                    if (eC !== e) {                      
-                      eC.style.border = 'none';
-                    } 
-                  });                  
-                  e.style.outlineOffset = '4px';
-                  e.style.border = '2px solid rgb(244, 124, 0)';
-
-                  let currentElement = event.target as HTMLElement;
-                  if (currentElement !== null && currentElement !== undefined) {
-                    let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
-                    if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {                      
-                      const objElement = JSON.parse(jsonDataElement);
-                      if (objElement !== null && objElement !== undefined) {
-                        compRef.instance.changeElement(objElement, currentElement);
-                        compRef.changeDetectorRef.detectChanges();
-                      }
-                    } else {                      
-                      let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
-                      if (closestElement !== null && closestElement !== undefined) {
-                        let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
-                        if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
-                          const objElement = JSON.parse(jsonDataElement);
-                          if (objElement !== null && objElement !== undefined) {
-                            compRef.instance.changeElement(objElement, closestElement);
-                            compRef.changeDetectorRef.detectChanges();
-                          }
-                        }
-                      }
-                    }
-                  }
-                };
+                });
+                this.subscriptions.push(elementMouseout$);
+                const elementClick$ = fromEvent<MouseEvent>(e, "click").subscribe((event: Event) => {
+                  this.prepareElement(e, frameContentWindow, compRef, event);
+                });
+                this.subscriptions.push(elementClick$);
+                const elementContext$ = fromEvent<MouseEvent>(e, "contextmenu").subscribe((event: Event) => {
+                  event.preventDefault();
+                  this.prepareElement(e, frameContentWindow, compRef, event);
+                });
+                this.subscriptions.push(elementContext$);
               }
             }
           }
