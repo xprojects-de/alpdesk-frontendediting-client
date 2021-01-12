@@ -194,8 +194,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         eC.style.border = 'none';
       }
     });
-    e.style.outlineOffset = '4px';
-    e.style.border = '2px solid rgb(244, 124, 0)';
 
     let currentElement = event.target as HTMLElement;
     if (currentElement !== null && currentElement !== undefined) {
@@ -205,6 +203,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         if (objElement !== null && objElement !== undefined) {
           compRef.instance.changeElement(objElement, currentElement);
           compRef.changeDetectorRef.detectChanges();
+          currentElement.style.outlineOffset = '4px';
+          currentElement.style.border = '2px solid rgb(244, 124, 0)';
         }
       } else {
         let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
@@ -215,6 +215,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (objElement !== null && objElement !== undefined) {
               compRef.instance.changeElement(objElement, closestElement);
               compRef.changeDetectorRef.detectChanges();
+              closestElement.style.outlineOffset = '4px';
+              closestElement.style.border = '2px solid rgb(244, 124, 0)';
             }
           }
         }
