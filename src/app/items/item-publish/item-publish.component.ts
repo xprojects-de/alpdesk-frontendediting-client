@@ -26,9 +26,9 @@ export class ItemPublishComponent extends BaseItemComponent {
   private generteRequestUrl(): string {
     let url: string = '';
     if (this.targetType === Constants.TARGETTYPE_CE) {
-      url = '/contao?do=' + this.do + '&table=tl_content&id=' + this.pid + '&cid=' + this.id + '&state=' + this.state + '&rt=' + this.rt;
+      url = '/contao?do=' + this.do + '&table=tl_content&id=' + this.pid + '&cid=' + this.id + '&state=' + (this.state === true ? 1 : 0) + '&rt=' + this.rt;
     } else if (this.targetType === Constants.TARGETTYPE_ARTICLE) {
-      url = '/contao?do=' + this.targetType + '&tid=' + this.id + '&state=' + this.state + '&rt=' + this.rt;
+      url = '/contao?do=' + this.targetType + '&tid=' + this.id + '&state=' + (this.state === true ? 1 : 0) + '&rt=' + this.rt;
     }
     return url;
   }
