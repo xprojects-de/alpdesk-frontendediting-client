@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
@@ -13,13 +13,12 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
   @Input('rt') rt: string = 'GplU6loiSGPizKIrwqtSgWVnYe8TIJEbyrc_kmp7B-0&ref=E4Mql9-C';
   @Input('frameurl') frameurl: string = '/preview.php';
-  @Input('frameheight') frameheight: string = '800px';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     //console.log(event.detail);
@@ -64,15 +63,23 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('document:' + Constants.ALPDESK_EVENTNAME_FRAME, ['$event']) onAFEEFrame_Event(event: CustomEvent) {
-    //console.log(event.detail);    
-  }
-
+  @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
+  @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
 
   title = 'alpdeskfee-client';
   url: any;
-  frameWidth = '100%';
+
+  framecontainerInitHeight = 500;
+  framecontainerInitHeightString = '500px';
+  framecontainerDimension = '-';
+  deviceselect = 'desktop';
+  phone_1 = 375;
+  phone_2 = 667;
+  tablet_1 = 760;
+  tablet_2 = 1024;
+
+  frameUrlContent = '/preview.php';
 
   private subscriptions: Subscription[] = [];
 
@@ -80,8 +87,25 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.framecontainerInitHeight = (window.innerHeight - 210);
+    this.framecontainerInitHeightString = this.framecontainerInitHeight + 'px';
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
-    //console.log(this.url);
+    this.frameUrlContent = this.frameurl;
+  }
+
+  ngAfterViewInit() {
+    this.showHideSpinner(true);
+    if (this.alpdeskfeeframecontainer !== null && this.alpdeskfeeframecontainer !== undefined) {
+      this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+      const framecontainerMouseover$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, "mouseover").subscribe((event: Event) => {
+        this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+      });
+      this.subscriptions.push(framecontainerMouseover$);
+      const framecontainerMouseout$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, "mouseout").subscribe((event: Event) => {
+        this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+      });
+      this.subscriptions.push(framecontainerMouseout$);
+    }
   }
 
   ngOnDestroy(): void {
@@ -91,6 +115,30 @@ export class AppComponent implements OnInit, OnDestroy {
         s.unsubscribe();
       }
     });
+  }
+
+  setDevice() {
+    if (this.alpdeskfeeframecontainer !== null && this.alpdeskfeeframecontainer !== undefined) {
+      if (this.deviceselect === 'phone') {
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_1 + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_2 ? this.framecontainerInitHeight : this.phone_2) + 'px';
+      } else if (this.deviceselect === 'phone_landscape') {
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_1 ? this.framecontainerInitHeight : this.phone_1) + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_2 + 'px';
+      } else if (this.deviceselect === 'tablet') {
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_1 + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.tablet_2 ? this.framecontainerInitHeight : this.tablet_2) + 'px';
+      } else if (this.deviceselect === 'tablet_landscape') {
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.framecontainerInitHeight ? this.framecontainerInitHeight : this.tablet_1) + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_2 + 'px';
+      } else {
+        this.alpdeskfeeframecontainer.nativeElement.style.width = '100%';
+        this.alpdeskfeeframecontainer.nativeElement.style.height = this.framecontainerInitHeight + 'px';
+      }
+
+      this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+
+    }
   }
 
   openDialog(params: any) {
@@ -111,24 +159,32 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   reloadIframe() {
-    document.dispatchEvent(new CustomEvent(Constants.ALPDESK_EVENTNAME_FRAME, {
-      detail: {
-        reload: true
-      }
-    }));
+    this.showHideSpinner(true);
     this.alpdeskfeeframe.nativeElement.contentWindow.location.reload();
   }
 
+  reloadIframeWithCondition() {
+    this.iframeLocation(this.frameUrlContent);
+  }
+
   iframeLocation(location: string) {
+    this.showHideSpinner(true);
     this.alpdeskfeeframe.nativeElement.contentWindow.location.href = location;
   }
 
   iframeLoad() {
-    document.dispatchEvent(new CustomEvent(Constants.ALPDESK_EVENTNAME_FRAME, {
-      detail: {
-        location: this.alpdeskfeeframe.nativeElement.contentWindow.location.href
+    this.frameUrlContent = this.alpdeskfeeframe.nativeElement.contentWindow.location.href.replace(this.base, '/');
+    this.showHideSpinner(false);
+  }
+
+  showHideSpinner(show: boolean) {
+    if(this.alpdeskfeeframespinner !== null && this.alpdeskfeeframespinner !== undefined) {
+      if(show) {
+        this.alpdeskfeeframespinner.nativeElement.style.display = 'block';
+      } else {
+        this.alpdeskfeeframespinner.nativeElement.style.display = 'none';
       }
-    }));
+    }
   }
 
   private prepareElement(e: HTMLElement, frameContentWindow: any, compRef: ComponentRef<ItemContainerComponent>, event: Event) {
