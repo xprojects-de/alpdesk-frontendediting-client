@@ -120,12 +120,12 @@
         [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
         [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-custom-module>
-    <ng-template
+    <ng-container
         *ngIf="jsonDataElement.subviewitems !== null && jsonDataElement.subviewitems !== undefined && jsonDataElement.subviewitems.length > 0">
         <app-item-custom-module *ngFor="let item of jsonDataElement.subviewitems" [title]="objLabels.element_mod"
             [targetType]="TARGETTYPE_MOD" [do]="item.path" [icon]="item.icon" [iconclass]="item.iconclass"
             [pageEdit]="pageEdit" [pageId]="pageId">
         </app-item-custom-module>
-    </ng-template>
+    </ng-container>
     <div [style.clear]="'both'"></div>
 </div>
