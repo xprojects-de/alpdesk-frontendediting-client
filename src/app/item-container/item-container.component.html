@@ -35,7 +35,7 @@
         [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-edit>
     <app-item-parent [title]="objLabels.edit_article" [action]="ACTION_PARENT_EDIT" [targetType]="TARGETTYPE_ARTICLE"
-        [do]="jsonDataParent.do" [id]="jsonDataParent.id" [id]="jsonDataParent.pid" [pageEdit]="pageEdit"
+        [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [pageEdit]="pageEdit"
         [pageId]="pageId">
     </app-item-parent>
     <app-item-publish *ngIf="jsonDataParent.canPublish === true" [title]="objLabels.article_visible"
