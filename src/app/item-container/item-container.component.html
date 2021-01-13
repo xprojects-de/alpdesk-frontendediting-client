@@ -17,9 +17,10 @@
     <div [style.clear]="'both'"></div>
 </div>
 
-<div #articleContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementParent" [offsetTop]="offsetTopParent"
-    [style.position]="'absolute'" [style.top]="offsetTopParent" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
-    [style.width]="'auto'" [style.right]="'0px'" [style.paddingRight]="'30px'" [style.transform]="transformElement"
+<div #articleContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementParent"
+    [offsetTop]="offsetTopParent" [style.position]="'absolute'" [style.top]="offsetTopParent"
+    [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'" [style.right]="'0px'"
+    [style.paddingRight]="'30px'" [style.transform]="transformElement"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'"
@@ -53,9 +54,10 @@
     <div [style.clear]="'both'"></div>
 </div>
 
-<div #elementContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement" [offsetTop]="offsetTopElement"
-    [style.position]="'absolute'" [style.top]="offsetTopElement" [style.left]="offsetLeftElement" [style.transform]="transformElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
-    [style.width]="'auto'"
+<div #elementContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement"
+    [offsetTop]="offsetTopElement" [style.position]="'absolute'" [style.top]="offsetTopElement"
+    [style.left]="offsetLeftElement" [style.transform]="transformElement"
+    [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'"
@@ -99,9 +101,10 @@
     <div [style.clear]="'both'"></div>
 </div>
 
-<div #modContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement" [offsetTop]="offsetTopElement"
-    [style.position]="'absolute'" [style.top]="offsetTopElement" [style.left]="offsetLeftElement" [style.transform]="transformElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
-    [style.width]="'auto'"
+<div #modContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement"
+    [offsetTop]="offsetTopElement" [style.position]="'absolute'" [style.top]="offsetTopElement"
+    [style.left]="offsetLeftElement" [style.transform]="transformElement"
+    [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'"
@@ -120,12 +123,12 @@
         [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
         [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-custom-module>
-    <ng-template
+    <ng-container
         *ngIf="jsonDataElement.subviewitems !== null && jsonDataElement.subviewitems !== undefined && jsonDataElement.subviewitems.length > 0">
         <app-item-custom-module *ngFor="let item of jsonDataElement.subviewitems" [title]="objLabels.element_mod"
             [targetType]="TARGETTYPE_MOD" [do]="item.path" [icon]="item.icon" [iconclass]="item.iconclass"
             [pageEdit]="pageEdit" [pageId]="pageId">
         </app-item-custom-module>
-    </ng-template>
+    </ng-container>
     <div [style.clear]="'both'"></div>
 </div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, ElementRef, Input, OnChanges, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -12,7 +12,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
   @Input() offsetTop: string = '0px';
 
   private element: HTMLElement;
-  private changed: boolean = false;
   private sticky: boolean = false;
 
   private subscriptions: Subscription[] = [];
@@ -27,38 +26,42 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
     this.draggableElement();
   }
 
-  ngOnChanges() {
-    this.changed = true;
-    this.positionStickyElement();
+  ngOnChanges(changes: SimpleChanges) {
+    // There is a bug in Safari! @Todo Has to be fixed
+    if(changes.selectedElement.previousValue !== undefined && changes.selectedElement.currentValue !== undefined) {
+      this.positionStickyElement();
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => {
       if (s !== null && s !== undefined) {
-        s.unsubscribe()
+        s.unsubscribe();
       }
     });
-    if(this.frameScrollSubscription !== null && this.frameScrollSubscription !== undefined) {
+    if (this.frameScrollSubscription !== null && this.frameScrollSubscription !== undefined) {
       this.frameScrollSubscription.unsubscribe();
     }
   }
 
   private positionStickyElement() {
-    let topSelected = this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight;
-    let bottomBorder = this.selectedElement.getBoundingClientRect().bottom;
-    if (bottomBorder <= 0) {
-      this.element.style.position = 'absolute';
-      this.element.style.top = this.offsetTop;
-      this.sticky = false;
-    } else {
-      if (topSelected <= 0 && !this.sticky) {
-        this.element.style.position = 'fixed';
-        this.element.style.top = '0px';
-        this.sticky = true;
-      } else if (topSelected > 0 && this.sticky) {
+    if (this.selectedElement !== undefined && this.selectedElement !== null && this.element !== undefined && this.element !== null) {
+      let topSelected = (this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight);
+      let bottomBorder = this.selectedElement.getBoundingClientRect().bottom;
+      if (bottomBorder <= 0) {
         this.element.style.position = 'absolute';
         this.element.style.top = this.offsetTop;
         this.sticky = false;
+      } else {
+        if (topSelected <= 0 && !this.sticky) {
+          this.element.style.position = 'fixed';
+          this.element.style.top = '0px';
+          this.sticky = true;
+        } else if (topSelected > 0 && this.sticky) {
+          this.element.style.position = 'absolute';
+          this.element.style.top = this.offsetTop;
+          this.sticky = false;
+        }
       }
     }
   }
@@ -68,12 +71,12 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
     this.frameScrollSubscription = frameScrollEvent$.subscribe((event: MouseEvent) => {
       if (this.frameContentDocument !== undefined && this.frameContentDocument !== null) {
         let scrollValue = 0;
-        if(this.frameContentDocument.scrollingElement) {
+        if (this.frameContentDocument.scrollingElement) {
           scrollValue = this.frameContentDocument.scrollingElement.scrollTop;
-        } else if(this.frameContentDocument.documentElement.scrollTop) {
+        } else if (this.frameContentDocument.documentElement.scrollTop) {
           scrollValue = this.frameContentDocument.documentElement.scrollTop;
-        } 
-        this.positionStickyElement();  
+        }
+        this.positionStickyElement();
       }
     });
   }

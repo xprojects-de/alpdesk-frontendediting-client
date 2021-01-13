@@ -1,6 +1,7 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { fromEvent, Subscription } from 'rxjs';
 import { Constants } from './classes/constants';
 import { UrlGenerator } from './classes/url-generator';
 import { ItemContainerComponent } from './item-container/item-container.component';
@@ -12,13 +13,12 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
   @Input('rt') rt: string = 'GplU6loiSGPizKIrwqtSgWVnYe8TIJEbyrc_kmp7B-0&ref=E4Mql9-C';
   @Input('frameurl') frameurl: string = '/preview.php';
-  @Input('frameheight') frameheight: string = '800px';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     //console.log(event.detail);
@@ -63,22 +63,82 @@ export class AppComponent implements OnInit {
     }
   }
 
-  @HostListener('document:' + Constants.ALPDESK_EVENTNAME_FRAME, ['$event']) onAFEEFrame_Event(event: CustomEvent) {
-    //console.log(event.detail);    
-  }
-
+  @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
+  @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
 
   title = 'alpdeskfee-client';
   url: any;
-  frameWidth = '100%';
+
+  framecontainerInitHeight = 500;
+  framecontainerInitHeightString = '500px';
+  framecontainerDimension = '-';
+  deviceselect = 'desktop';
+  phone_1 = 375;
+  phone_2 = 667;
+  tablet_1 = 760;
+  tablet_2 = 1024;
+
+  frameUrlContent = '/preview.php';
+
+  private subscriptions: Subscription[] = [];
 
   constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService) {
   }
 
   ngOnInit() {
+    this.framecontainerInitHeight = (window.innerHeight - 210);
+    this.framecontainerInitHeightString = this.framecontainerInitHeight + 'px';
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
-    //console.log(this.url);
+    this.frameUrlContent = this.frameurl;
+  }
+
+  ngAfterViewInit() {
+    this.showHideSpinner(true);
+    if (this.alpdeskfeeframecontainer !== null && this.alpdeskfeeframecontainer !== undefined) {
+      this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+      const framecontainerMouseover$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, "mouseover").subscribe((event: Event) => {
+        this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+      });
+      this.subscriptions.push(framecontainerMouseover$);
+      const framecontainerMouseout$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, "mouseout").subscribe((event: Event) => {
+        this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+      });
+      this.subscriptions.push(framecontainerMouseout$);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((s) => {
+      if (s !== null && s !== undefined) {
+        console.log(s);
+        s.unsubscribe();
+      }
+    });
+  }
+
+  setDevice() {
+    if (this.alpdeskfeeframecontainer !== null && this.alpdeskfeeframecontainer !== undefined) {
+      if (this.deviceselect === 'phone') {
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_1 + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_2 ? this.framecontainerInitHeight : this.phone_2) + 'px';
+      } else if (this.deviceselect === 'phone_landscape') {
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_1 ? this.framecontainerInitHeight : this.phone_1) + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_2 + 'px';
+      } else if (this.deviceselect === 'tablet') {
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_1 + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.tablet_2 ? this.framecontainerInitHeight : this.tablet_2) + 'px';
+      } else if (this.deviceselect === 'tablet_landscape') {
+        this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.framecontainerInitHeight ? this.framecontainerInitHeight : this.tablet_1) + 'px';
+        this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_2 + 'px';
+      } else {
+        this.alpdeskfeeframecontainer.nativeElement.style.width = '100%';
+        this.alpdeskfeeframecontainer.nativeElement.style.height = this.framecontainerInitHeight + 'px';
+      }
+
+      this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
+
+    }
   }
 
   openDialog(params: any) {
@@ -99,24 +159,69 @@ export class AppComponent implements OnInit {
   }
 
   reloadIframe() {
-    document.dispatchEvent(new CustomEvent(Constants.ALPDESK_EVENTNAME_FRAME, {
-      detail: {
-        reload: true
-      }
-    }));
+    this.showHideSpinner(true);
     this.alpdeskfeeframe.nativeElement.contentWindow.location.reload();
   }
 
+  reloadIframeWithCondition() {
+    this.iframeLocation(this.frameUrlContent);
+  }
+
   iframeLocation(location: string) {
+    this.showHideSpinner(true);
     this.alpdeskfeeframe.nativeElement.contentWindow.location.href = location;
   }
 
   iframeLoad() {
-    document.dispatchEvent(new CustomEvent(Constants.ALPDESK_EVENTNAME_FRAME, {
-      detail: {
-        location: this.alpdeskfeeframe.nativeElement.contentWindow.location.href
+    this.frameUrlContent = this.alpdeskfeeframe.nativeElement.contentWindow.location.href.replace(this.base, '/');
+    this.showHideSpinner(false);
+  }
+
+  showHideSpinner(show: boolean) {
+    if(this.alpdeskfeeframespinner !== null && this.alpdeskfeeframespinner !== undefined) {
+      if(show) {
+        this.alpdeskfeeframespinner.nativeElement.style.display = 'block';
+      } else {
+        this.alpdeskfeeframespinner.nativeElement.style.display = 'none';
       }
-    }));
+    }
+  }
+
+  private prepareElement(e: HTMLElement, frameContentWindow: any, compRef: ComponentRef<ItemContainerComponent>, event: Event) {
+    let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
+    cData.forEach((eC: HTMLElement) => {
+      if (eC !== e) {
+        eC.style.border = 'none';
+      }
+    });
+
+    let currentElement = event.target as HTMLElement;
+    if (currentElement !== null && currentElement !== undefined) {
+      let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
+      if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
+        const objElement = JSON.parse(jsonDataElement);
+        if (objElement !== null && objElement !== undefined) {
+          compRef.instance.changeElement(objElement, currentElement);
+          compRef.changeDetectorRef.detectChanges();
+          currentElement.style.outlineOffset = '4px';
+          currentElement.style.border = '2px solid rgb(244, 124, 0)';
+        }
+      } else {
+        let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
+        if (closestElement !== null && closestElement !== undefined) {
+          let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
+          if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
+            const objElement = JSON.parse(jsonDataElement);
+            if (objElement !== null && objElement !== undefined) {
+              compRef.instance.changeElement(objElement, closestElement);
+              compRef.changeDetectorRef.detectChanges();
+              closestElement.style.outlineOffset = '4px';
+              closestElement.style.border = '2px solid rgb(244, 124, 0)';
+            }
+          }
+        }
+      }
+    }
   }
 
   scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
@@ -150,70 +255,35 @@ export class AppComponent implements OnInit {
                 if (parentNode !== null) {
                   parentNode.style.minHeight = '50px';
                   parentNode.classList.add('alpdeskfee-article-container');
-                  /*parentNode.onmouseover = function (event) {
-                    if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.outline = '2px dashed rgb(244, 124, 0)';
-                    }
-                  };
-                  parentNode.onmouseout = function () {
-                    if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.outline = '0px dashed rgb(244, 124, 0)';
-                    }
-                  };*/
-                  parentNode.onclick = function () {
+                  const parentClick$ = fromEvent<MouseEvent>(parentNode, "click").subscribe((event: Event) => {
                     if (parentNode !== null) {
                       compRef.instance.changeParent(obj, parentNode);
                       compRef.changeDetectorRef.detectChanges();
-                      //parentNode.style.outlineOffset = '4px';
-                      //parentNode.style.borderLeft = '2px solid rgb(244, 124, 0)';
                     }
-                  };
+                  });
+                  this.subscriptions.push(parentClick$);
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
-                e.onmouseover = function () {
+                const elementMouseover$ = fromEvent<MouseEvent>(e, "mouseover").subscribe((event: Event) => {
                   e.style.outline = '2px dashed rgb(244, 124, 0)';
                   e.style.outlineOffset = '2px';
-                };
-                e.onmouseout = function () {
+                });
+                this.subscriptions.push(elementMouseover$);
+                const elementMouseout$ = fromEvent<MouseEvent>(e, "mouseout").subscribe((event: Event) => {
                   e.style.outline = '0px dashed rgb(244, 124, 0)';
                   e.style.outlineOffset = '0px';
-                };
-                e.onclick = function (event: Event) {
-
-                  let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
-                  cData.forEach((eC: HTMLElement) => {
-                    if (eC !== e) {                      
-                      eC.style.border = 'none';
-                    } 
-                  });                  
-                  e.style.outlineOffset = '4px';
-                  e.style.border = '2px solid rgb(244, 124, 0)';
-
-                  let currentElement = event.target as HTMLElement;
-                  if (currentElement !== null && currentElement !== undefined) {
-                    let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
-                    if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {                      
-                      const objElement = JSON.parse(jsonDataElement);
-                      if (objElement !== null && objElement !== undefined) {
-                        compRef.instance.changeElement(objElement, currentElement);
-                        compRef.changeDetectorRef.detectChanges();
-                      }
-                    } else {                      
-                      let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
-                      if (closestElement !== null && closestElement !== undefined) {
-                        let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
-                        if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
-                          const objElement = JSON.parse(jsonDataElement);
-                          if (objElement !== null && objElement !== undefined) {
-                            compRef.instance.changeElement(objElement, closestElement);
-                            compRef.changeDetectorRef.detectChanges();
-                          }
-                        }
-                      }
-                    }
-                  }
-                };
+                });
+                this.subscriptions.push(elementMouseout$);
+                const elementClick$ = fromEvent<MouseEvent>(e, "click").subscribe((event: Event) => {
+                  this.prepareElement(e, frameContentWindow, compRef, event);
+                });
+                this.subscriptions.push(elementClick$);
+                const elementContext$ = fromEvent<MouseEvent>(e, "contextmenu").subscribe((event: Event) => {
+                  event.preventDefault();
+                  this.prepareElement(e, frameContentWindow, compRef, event);
+                });
+                this.subscriptions.push(elementContext$);
               }
             }
           }

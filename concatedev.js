@@ -15,9 +15,14 @@ const concat = require('concat');
         './dist/alpdeskfee-client/vendor-es2015.js',
         './dist/alpdeskfee-client/main-es2015.js',
     ]
+    const files_css = [
+        './contao.css',
+        './dist/alpdeskfee-client/styles.css',
+    ]
     await fs.ensureDir('elements')
     await concat(files_es5, 'elements/alpdeskfee-elements-dev-es5.js');
     await concat(files_es6, 'elements/alpdeskfee-elements-dev-es6.js');
-    await fs.copyFile('./dist/alpdeskfee-client/styles.css', 'elements/styles-dev.css')
+    await concat(files_css, 'elements/alpdeskfee-styles-dev.css');
+    //await fs.copyFile('./dist/alpdeskfee-client/styles.css', 'elements/styles-dev.css')
     //await fs.copy('./dist/angular-elements/assets/', 'elements/assets/')
 })()

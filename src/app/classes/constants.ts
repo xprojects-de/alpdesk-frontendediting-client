@@ -1,7 +1,6 @@
 export class Constants {
 
     public static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
-    public static ALPDESK_EVENTNAME_FRAME = 'alpdesk_frontendediting_framechangedEvent';
     
     public static TARGETTYPE_PAGE = 'page';
     public static TARGETTYPE_ARTICLE = 'article';

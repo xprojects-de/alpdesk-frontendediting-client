@@ -26,6 +26,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ItemBarDirective } from './directives/item-bar.directive';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule }   from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatDialogModule,
     MatButtonModule,
     DragDropModule,
-    MatIconModule
+    MatIconModule,
+    MatSelectModule,
+    MatInputModule,
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   //entryComponents: [AppComponent],
   providers: [],
