@@ -124,7 +124,6 @@ export class ItemContainerComponent implements OnInit {
 
   pushActiveElement(element: HTMLElement) {
     this.activeElements.push(element);
-    console.log(this.activeElements);
   }
 
 }

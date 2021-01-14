@@ -195,6 +195,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
+    // Idea to recognize all clicked elements and show any Bubble with number of items (e.g. ContenSlider, SubColumns, etc)
+    //compRef.instance.pushActiveElement(e);
+
     let currentElement = event.target as HTMLElement;
     if (currentElement !== null && currentElement !== undefined) {
       let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
