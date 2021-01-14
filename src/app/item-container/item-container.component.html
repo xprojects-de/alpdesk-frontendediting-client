@@ -18,7 +18,7 @@
 </div>
 
 <div #articleContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementParent"
-    [offsetTop]="offsetTopParent" [style.position]="'absolute'" [style.top]="offsetTopParent"
+    [offsetTop]="offsetOriginalTopParent" [style.position]="positionParent" [style.top]="offsetTopParent"
     [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'" [style.right]="'0px'"
     [style.paddingRight]="'30px'" [style.transform]="transformElement"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
@@ -55,7 +55,7 @@
 </div>
 
 <div #elementContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement"
-    [offsetTop]="offsetTopElement" [style.position]="'absolute'" [style.top]="offsetTopElement"
+    [offsetTop]="offsetOriginalTopElement" [style.position]="positionElement" [style.top]="offsetTopElement"
     [style.left]="offsetLeftElement" [style.transform]="transformElement"
     [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
@@ -102,7 +102,7 @@
 </div>
 
 <div #modContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement"
-    [offsetTop]="offsetTopElement" [style.position]="'absolute'" [style.top]="offsetTopElement"
+    [offsetTop]="offsetOriginalTopElement" [style.position]="'absolute'" [style.top]="offsetTopElement"
     [style.left]="offsetLeftElement" [style.transform]="transformElement"
     [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"

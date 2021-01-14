@@ -25,15 +25,20 @@ export class ItemContainerComponent implements OnInit {
 
   elementParent!: HTMLElement;
   jsonDataParent: any;
+  positionParent: string = 'absolute';
+  offsetOriginalTopParent: string = '0px';
   offsetTopParent: string = '0px';
-  transformParent: string =  'translate3d(0, 0, 0)';
-  
+  transformParent: string = 'translate3d(0, 0, 0)';
+
   elementElement!: HTMLElement;
   jsonDataElement: any;
+  positionElement: string = 'absolute';
+  offsetOriginalTopElement: string = '0px';
   offsetTopElement: string = '0px';
   offsetLeftElement: string = '0px';
-  transformElement: string =  'translate3d(0, 0, 0)';
-  
+  transformElement: string = 'translate3d(0, 0, 0)';
+
+  activeElements: HTMLElement[] = [];
 
   TARGETTYPE_PAGE = Constants.TARGETTYPE_PAGE;
   TARGETTYPE_ARTICLE = Constants.TARGETTYPE_ARTICLE;
@@ -53,16 +58,25 @@ export class ItemContainerComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
   changeParent(jsonData: any, element: HTMLElement): void {
     this.jsonDataParent = jsonData;
     this.elementParent = element;
     if (this.elementParent !== null) {
       let top = element.getBoundingClientRect().top - this.currentHeight;
-      this.offsetTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      this.offsetOriginalTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      if (top <= 0) {
+        this.positionParent = 'fixed';
+        this.offsetTopParent = '0px';
+      } else {
+        this.positionParent = 'absolute';
+        this.offsetTopParent = this.offsetOriginalTopParent;
+      }
       if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
       }
     } else {
+      this.positionParent = 'absolute';
       this.offsetTopParent = '0px';
       if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
@@ -75,25 +89,42 @@ export class ItemContainerComponent implements OnInit {
     this.elementElement = element;
     if (this.elementElement !== null) {
       let top = element.getBoundingClientRect().top - this.currentHeight;
-      this.offsetTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      this.offsetOriginalTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      if (top <= 0) {
+        this.positionElement = 'fixed';
+        this.offsetTopElement = '0px';
+      } else {
+        this.positionElement = 'absolute';
+        this.offsetTopElement = this.offsetOriginalTopElement;
+      }
       this.offsetLeftElement = element.getBoundingClientRect().left + 'px';
-      if(this.elementContainer !== null && this.elementContainer !== undefined) {
+      if (this.elementContainer !== null && this.elementContainer !== undefined) {
         this.elementContainer.nativeElement.style.transform = this.transformElement;
       }
-      if(this.modContainer !== null && this.modContainer !== undefined) {
+      if (this.modContainer !== null && this.modContainer !== undefined) {
         this.modContainer.nativeElement.style.transform = this.transformElement;
       }
     } else {
+      this.positionElement = 'absolute';
       this.offsetTopElement = '0px';
       this.offsetLeftElement = '0px';
-      if(this.elementContainer !== null && this.elementContainer !== undefined) {
+      if (this.elementContainer !== null && this.elementContainer !== undefined) {
         this.elementContainer.nativeElement.style.transform = this.transformElement;
       }
-      if(this.modContainer !== null && this.modContainer !== undefined) {
+      if (this.modContainer !== null && this.modContainer !== undefined) {
         this.modContainer.nativeElement.style.transform = this.transformElement;
       }
     }
 
+  }
+
+  clearActiveElements() {
+    this.activeElements = [];
+  }
+
+  pushActiveElement(element: HTMLElement) {
+    this.activeElements.push(element);
+    console.log(this.activeElements);
   }
 
 }

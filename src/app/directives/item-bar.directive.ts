@@ -27,10 +27,8 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // There is a bug in Safari! @Todo Has to be fixed
-    if(changes.selectedElement.previousValue !== undefined && changes.selectedElement.currentValue !== undefined) {
-      this.positionStickyElement();
-    }
+    // Not working in Safari. It seems to be a problem when the bar is change by Directive at first creation
+    //this.positionStickyElement();
   }
 
   ngOnDestroy(): void {
@@ -46,7 +44,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
   private positionStickyElement() {
     if (this.selectedElement !== undefined && this.selectedElement !== null && this.element !== undefined && this.element !== null) {
-      let topSelected = (this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight);
+      let topSelected = this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight;
       let bottomBorder = this.selectedElement.getBoundingClientRect().bottom;
       if (bottomBorder <= 0) {
         this.element.style.position = 'absolute';
