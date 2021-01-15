@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Constants } from '../classes/constants';
+import { ElementPosition } from '../interfaces/element-position';
 
 @Component({
   selector: 'app-item-container',
@@ -25,15 +26,20 @@ export class ItemContainerComponent implements OnInit {
 
   elementParent!: HTMLElement;
   jsonDataParent: any;
+  positionParent: string = 'absolute';
+  offsetOriginalTopParent: string = '0px';
   offsetTopParent: string = '0px';
-  transformParent: string =  'translate3d(0, 0, 0)';
-  
+  transformParent: string = 'translate3d(0, 0, 0)';
+
   elementElement!: HTMLElement;
   jsonDataElement: any;
+  positionElement: string = 'absolute';
+  offsetOriginalTopElement: string = '0px';
   offsetTopElement: string = '0px';
   offsetLeftElement: string = '0px';
-  transformElement: string =  'translate3d(0, 0, 0)';
-  
+  transformElement: string = 'translate3d(0, 0, 0)';
+
+  activeElements: HTMLElement[] = [];
 
   TARGETTYPE_PAGE = Constants.TARGETTYPE_PAGE;
   TARGETTYPE_ARTICLE = Constants.TARGETTYPE_ARTICLE;
@@ -53,19 +59,32 @@ export class ItemContainerComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
   changeParent(jsonData: any, element: HTMLElement): void {
     this.jsonDataParent = jsonData;
     this.elementParent = element;
     if (this.elementParent !== null) {
       let top = element.getBoundingClientRect().top - this.currentHeight;
-      this.offsetTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      this.offsetOriginalTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      if (top <= 0) {
+        this.positionParent = 'fixed';
+        this.offsetTopParent = '0px';
+      } else {
+        this.positionParent = 'absolute';
+        this.offsetTopParent = this.offsetOriginalTopParent;
+      }
       if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
+        // Bug Safari
+        this.articleContainer.nativeElement.style.position = this.positionParent;
       }
     } else {
+      this.positionParent = 'absolute';
       this.offsetTopParent = '0px';
       if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
+        // Bug Safari
+        this.articleContainer.nativeElement.style.position = this.positionParent;
       }
     }
   }
@@ -75,25 +94,55 @@ export class ItemContainerComponent implements OnInit {
     this.elementElement = element;
     if (this.elementElement !== null) {
       let top = element.getBoundingClientRect().top - this.currentHeight;
-      this.offsetTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
-      this.offsetLeftElement = element.getBoundingClientRect().left + 'px';
-      if(this.elementContainer !== null && this.elementContainer !== undefined) {
-        this.elementContainer.nativeElement.style.transform = this.transformElement;
+      this.offsetOriginalTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      if (top <= 0) {
+        this.positionElement = 'fixed';
+        this.offsetTopElement = '0px';
+      } else {
+        this.positionElement = 'absolute';
+        this.offsetTopElement = this.offsetOriginalTopElement;
       }
-      if(this.modContainer !== null && this.modContainer !== undefined) {
+      this.offsetLeftElement = element.getBoundingClientRect().left + 'px';
+      if (this.elementContainer !== null && this.elementContainer !== undefined) {
+        this.elementContainer.nativeElement.style.transform = this.transformElement;
+        // Bug Safari
+        this.elementContainer.nativeElement.style.position = this.positionElement;
+      }
+      if (this.modContainer !== null && this.modContainer !== undefined) {
         this.modContainer.nativeElement.style.transform = this.transformElement;
+        this.modContainer.nativeElement.style.position = this.positionElement;
       }
     } else {
+      this.positionElement = 'absolute';
       this.offsetTopElement = '0px';
       this.offsetLeftElement = '0px';
-      if(this.elementContainer !== null && this.elementContainer !== undefined) {
+      if (this.elementContainer !== null && this.elementContainer !== undefined) {
         this.elementContainer.nativeElement.style.transform = this.transformElement;
+        this.elementContainer.nativeElement.style.position = this.positionElement;
       }
-      if(this.modContainer !== null && this.modContainer !== undefined) {
+      if (this.modContainer !== null && this.modContainer !== undefined) {
         this.modContainer.nativeElement.style.transform = this.transformElement;
+        this.modContainer.nativeElement.style.position = this.positionElement;
       }
     }
+  }
 
+  directiveChangePositionParent(event: ElementPosition) {
+    //this.positionParent = event.position;
+    //this.offsetTopParent = event.top;
+  }
+
+  directiveChangePositionElement(event: ElementPosition) {
+    //this.positionElement = event.position;
+    //this.offsetTopElement = event.top;
+  }
+
+  clearActiveElements() {
+    this.activeElements = [];
+  }
+
+  pushActiveElement(element: HTMLElement) {
+    this.activeElements.push(element);
   }
 
 }
