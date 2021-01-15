@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Constants } from '../classes/constants';
+import { ElementPosition } from '../interfaces/element-position';
 
 @Component({
   selector: 'app-item-container',
@@ -74,12 +75,16 @@ export class ItemContainerComponent implements OnInit {
       }
       if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
+        // Bug Safari
+        this.articleContainer.nativeElement.style.position = this.positionParent;
       }
     } else {
       this.positionParent = 'absolute';
       this.offsetTopParent = '0px';
       if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
+        // Bug Safari
+        this.articleContainer.nativeElement.style.position = this.positionParent;
       }
     }
   }
@@ -100,9 +105,12 @@ export class ItemContainerComponent implements OnInit {
       this.offsetLeftElement = element.getBoundingClientRect().left + 'px';
       if (this.elementContainer !== null && this.elementContainer !== undefined) {
         this.elementContainer.nativeElement.style.transform = this.transformElement;
+        // Bug Safari
+        this.elementContainer.nativeElement.style.position = this.positionElement;
       }
       if (this.modContainer !== null && this.modContainer !== undefined) {
         this.modContainer.nativeElement.style.transform = this.transformElement;
+        this.modContainer.nativeElement.style.position = this.positionElement;
       }
     } else {
       this.positionElement = 'absolute';
@@ -110,12 +118,23 @@ export class ItemContainerComponent implements OnInit {
       this.offsetLeftElement = '0px';
       if (this.elementContainer !== null && this.elementContainer !== undefined) {
         this.elementContainer.nativeElement.style.transform = this.transformElement;
+        this.elementContainer.nativeElement.style.position = this.positionElement;
       }
       if (this.modContainer !== null && this.modContainer !== undefined) {
         this.modContainer.nativeElement.style.transform = this.transformElement;
+        this.modContainer.nativeElement.style.position = this.positionElement;
       }
     }
+  }
 
+  directiveChangePositionParent(event: ElementPosition) {
+    //this.positionParent = event.position;
+    //this.offsetTopParent = event.top;
+  }
+
+  directiveChangePositionElement(event: ElementPosition) {
+    //this.positionElement = event.position;
+    //this.offsetTopElement = event.top;
   }
 
   clearActiveElements() {

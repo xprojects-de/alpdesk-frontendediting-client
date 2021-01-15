@@ -1,6 +1,7 @@
-import { AfterViewInit, Directive, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ElementPosition } from '../interfaces/element-position';
 
 @Directive({
   selector: '[appItemBar]'
@@ -10,6 +11,8 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
   @Input() frameContentDocument!: HTMLDocument;
   @Input() selectedElement!: HTMLElement;
   @Input() offsetTop: string = '0px';
+
+  @Output() directiveChangePosition = new EventEmitter<ElementPosition>();
 
   private element: HTMLElement;
   private sticky: boolean = false;
@@ -50,15 +53,18 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
         this.element.style.position = 'absolute';
         this.element.style.top = this.offsetTop;
         this.sticky = false;
+        this.directiveChangePosition.emit({ top: this.offsetTop, position: 'absolute' });
       } else {
         if (topSelected <= 0 && !this.sticky) {
           this.element.style.position = 'fixed';
           this.element.style.top = '0px';
           this.sticky = true;
+          this.directiveChangePosition.emit({ top: '0px', position: 'fixed' });
         } else if (topSelected > 0 && this.sticky) {
           this.element.style.position = 'absolute';
           this.element.style.top = this.offsetTop;
           this.sticky = false;
+          this.directiveChangePosition.emit({ top: this.offsetTop, position: 'absolute' });
         }
       }
     }
