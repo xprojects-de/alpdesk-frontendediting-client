@@ -43,7 +43,7 @@
         [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [state]="jsonDataParent.invisible" [pageEdit]="pageEdit"
         [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-publish>
-    <app-item-delete *ngIf="jsonDataParent.canDelete === true" [title]="objLabels.delete_article"
+    <app-item-delete *ngIf="jsonDataParent.canDelete === true" [title]="objLabels.delete_article" [confirmlabel]="objLabels.delete_confirm_article"
         [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_ARTICLE" [do]="jsonDataParent.do"
         [id]="jsonDataParent.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-delete>
@@ -85,7 +85,7 @@
         [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid"
         [state]="jsonDataElement.invisible" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-publish>
-    <app-item-delete *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.delete_element"
+    <app-item-delete *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.delete_element" [confirmlabel]="objLabels.delete_confirm_element"
         [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
         [id]="jsonDataElement.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-delete>
