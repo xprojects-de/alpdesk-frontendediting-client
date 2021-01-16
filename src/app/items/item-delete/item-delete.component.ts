@@ -10,6 +10,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class ItemDeleteComponent extends BaseItemComponent {
 
   @Input() title: string = '';
+  @Input() confirmlabel: string = '';
   @Input() action: string = '';
   @Input() targetType: string = '';
   @Input() do: string = '';
@@ -32,7 +33,10 @@ export class ItemDeleteComponent extends BaseItemComponent {
   }
 
   click() {
-    if (confirm("Really delete?")) {
+    if(this.confirmlabel === '') {
+      this.confirmlabel = "Really delete?";
+    }
+    if (confirm(this.confirmlabel)) {
       const url: string = this.generteRequestUrl();
       this.dispatchEvent({
         reloadFrame: true,
