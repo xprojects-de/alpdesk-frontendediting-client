@@ -1,4 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import "~@angular/material/theming";
+@include mat-core();
+
+/* ======== Angular material custom themes ======== */
+
+body {
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue",
+        sans-serif;
+}
+
+$custom-typography: mat-typography-config(
+    $font-family:
+        '-apple-system, system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;',
+);
+@include mat-core($custom-typography);
+
+$alpdesktheme-primary: mat-palette($mat-deep-orange);
+$alpdesktheme-accent: mat-palette($mat-grey, 100, 500, A100);
+$alpdesktheme-warn: mat-palette($mat-red);
+
+$alpdesktheme: mat-light-theme($alpdesktheme-primary, $alpdesktheme-accent, $alpdesktheme-warn);
+
+@include angular-material-theme($alpdesktheme);
