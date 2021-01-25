@@ -1,5 +1,8 @@
 <mat-dialog-content class="mat-typography">
-  <iframe [src]="url" width="100%" height="{{height}}" frameborder="0"></iframe>
+  <div #alpdeskfeemodalspinner>
+    <mat-spinner [style.position]="'absolute'" [style.top]="'50%'" [style.left]="'50%'" [style.transform]="'translate(-50%, -50%)'"></mat-spinner>
+  </div>
+  <iframe #alpdeskfeemodalframe [src]="url" width="100%" height="{{height}}" frameborder="0" (load)="iframeLoad()"></iframe>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>

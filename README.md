@@ -4,7 +4,7 @@
 ng build --outputPath=/Users/benjaminhummel/Documents/MAMPP/contao.local/web/alpdeskfee-client --base-href /alpdeskfee-client/ --watch
 
 ## Test using external index.html
-npm insall http-server -g
+npm install http-server -g
 http-server --cors
 
 ## Final build
