@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Constants } from '../classes/constants';
 import { ElementPosition } from '../interfaces/element-position';
 
@@ -7,7 +7,7 @@ import { ElementPosition } from '../interfaces/element-position';
   templateUrl: './item-container.component.html',
   styleUrls: ['./item-container.component.scss']
 })
-export class ItemContainerComponent implements OnInit {
+export class ItemContainerComponent {
 
   @ViewChild('articleContainer') articleContainer!: ElementRef;
   @ViewChild('elementContainer') elementContainer!: ElementRef;
@@ -53,12 +53,14 @@ export class ItemContainerComponent implements OnInit {
   ACTION_ELEMENT_SHOW = Constants.ACTION_ELEMENT_SHOW;
   ACTION_ELEMENT_NEW = Constants.ACTION_ELEMENT_NEW;
   ACTION_ELEMENT_COPY = Constants.ACTION_ELEMENT_COPY;
+  ACTION_ELEMENT_CUT = Constants.ACTION_ELEMENT_CUT;
+  ACTION_ELEMENT_DRAG = Constants.ACTION_ELEMENT_DRAG;
+  ACTION_ELEMENT_PASTEAFTER = Constants.ACTION_ELEMENT_PASTEAFTER;
+
+  pasteAfterId = 0;
+  pasteAfterMode = '';
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 
   changeParent(jsonData: any, element: HTMLElement): void {
     this.jsonDataParent = jsonData;
@@ -135,6 +137,14 @@ export class ItemContainerComponent implements OnInit {
   directiveChangePositionElement(event: ElementPosition) {
     //this.positionElement = event.position;
     //this.offsetTopElement = event.top;
+  }
+
+  setPasteAfterId(value: number) {
+    this.pasteAfterId = value;
+  }
+
+  setPasteAfterMode(value: string) {
+    this.pasteAfterMode = value;
   }
 
   clearActiveElements() {

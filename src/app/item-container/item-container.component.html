@@ -18,9 +18,9 @@
 </div>
 
 <div #articleContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementParent"
-    [offsetTop]="offsetOriginalTopParent" (directiveChangePosition)="directiveChangePositionParent($event)" [style.position]="positionParent" [style.top]="offsetTopParent"
-    [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'" [style.right]="'0px'"
-    [style.paddingRight]="'30px'" [style.transform]="transformElement"
+    [offsetTop]="offsetOriginalTopParent" (directiveChangePosition)="directiveChangePositionParent($event)"
+    [style.position]="positionParent" [style.top]="offsetTopParent" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
+    [style.width]="'auto'" [style.right]="'0px'" [style.paddingRight]="'30px'" [style.transform]="transformElement"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'"
@@ -43,9 +43,10 @@
         [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [state]="jsonDataParent.invisible" [pageEdit]="pageEdit"
         [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-publish>
-    <app-item-delete *ngIf="jsonDataParent.canDelete === true" [title]="objLabels.delete_article" [confirmlabel]="objLabels.delete_confirm_article"
-        [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_ARTICLE" [do]="jsonDataParent.do"
-        [id]="jsonDataParent.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
+    <app-item-delete *ngIf="jsonDataParent.canDelete === true" [title]="objLabels.delete_article"
+        [confirmlabel]="objLabels.delete_confirm_article" [action]="ACTION_ELEMENT_DELETE"
+        [targetType]="TARGETTYPE_ARTICLE" [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pageEdit]="pageEdit"
+        [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-delete>
     <app-item-new [title]="objLabels.new_element_top" [action]="ACTION_ELEMENT_NEW" [targetType]="TARGETTYPE_ARTICLE"
         [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [pageEdit]="pageEdit"
@@ -55,9 +56,9 @@
 </div>
 
 <div #elementContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement"
-    [offsetTop]="offsetOriginalTopElement" (directiveChangePosition)="directiveChangePositionElement($event)" [style.position]="positionElement" [style.top]="offsetTopElement"
-    [style.left]="offsetLeftElement" [style.transform]="transformElement"
-    [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
+    [offsetTop]="offsetOriginalTopElement" (directiveChangePosition)="directiveChangePositionElement($event)"
+    [style.position]="positionElement" [style.top]="offsetTopElement" [style.left]="offsetLeftElement"
+    [style.transform]="transformElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'"
@@ -80,14 +81,19 @@
         [action]="ACTION_ELEMENT_COPY" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do" [id]="jsonDataElement.id"
         [pid]="jsonDataElement.pid" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-copy>
+    <app-item-cut *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.cut_drag_element"
+        [action]="ACTION_ELEMENT_CUT" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do" [id]="jsonDataElement.id"
+        [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
+    </app-item-cut>
     <app-item-publish *ngIf="jsonDataElement.canEdit === true && jsonDataElement.canPublish === true"
         [title]="objLabels.element_visible" [action]="ACTION_ELEMENT_VISIBILITY" [targetType]="TARGETTYPE_CE"
         [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid"
         [state]="jsonDataElement.invisible" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-publish>
-    <app-item-delete *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.delete_element" [confirmlabel]="objLabels.delete_confirm_element"
-        [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
-        [id]="jsonDataElement.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
+    <app-item-delete *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.delete_element"
+        [confirmlabel]="objLabels.delete_confirm_element" [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base"
+        [rt]="rt">
     </app-item-delete>
     <app-item-new *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.new_element" [action]="ACTION_ELEMENT_NEW"
         [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid"
@@ -98,13 +104,18 @@
         [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
         [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-custom-module>
+    <app-item-paste-after *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.cut_drag_element"
+        [action]="ACTION_ELEMENT_PASTEAFTER" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
+        [id]="jsonDataElement.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base"
+        [rt]="rt">
+    </app-item-paste-after>
     <div [style.clear]="'both'"></div>
 </div>
 
 <div #modContainer appItemBar [frameContentDocument]="frameContentDocument" [selectedElement]="elementElement"
-    [offsetTop]="offsetOriginalTopElement" (directiveChangePosition)="directiveChangePositionElement($event)" [style.position]="positionElement" [style.top]="offsetTopElement"
-    [style.left]="offsetLeftElement" [style.transform]="transformElement"
-    [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
+    [offsetTop]="offsetOriginalTopElement" (directiveChangePosition)="directiveChangePositionElement($event)"
+    [style.position]="positionElement" [style.top]="offsetTopElement" [style.left]="offsetLeftElement"
+    [style.transform]="transformElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'" [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'"

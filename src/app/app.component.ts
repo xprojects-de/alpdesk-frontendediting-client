@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
 import { Constants } from './classes/constants';
 import { UrlGenerator } from './classes/url-generator';
+import { ContaoClipboardCommon } from './interfaces/contao-clipboard';
 import { ItemContainerComponent } from './item-container/item-container.component';
 import { AlpdeskFeeServiceService } from './services/alpdesk-fee-service.service';
 import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       params.preRequestPost = false;
       this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(
         (data) => {
+          //console.log(data);
           document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
           }));
@@ -84,6 +86,38 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscriptions: Subscription[] = [];
 
   constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService) {
+  }
+
+  private updateFromContaoClipboard(e: HTMLElement, frameContentWindow: any, compRef: ComponentRef<ItemContainerComponent>) {
+    const data: any = {
+      rt: this.rt,
+      action: Constants.ACTION_CLIPBOARD,
+      targetType: Constants.TARGETTYPE_INFO
+    };
+    this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
+      (clipboard: ContaoClipboardCommon) => {
+        //console.log(clipboard);
+        if(clipboard !== null && clipboard !== undefined) {
+          // parse tl_content clipboard
+          if (clipboard.tl_content !== null && clipboard.tl_content !== undefined) {
+            if (clipboard.tl_content.id !== 0) {
+              if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
+                compRef.instance.setPasteAfterId(clipboard.tl_content.id);
+                compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
+              } else {
+                compRef.instance.setPasteAfterId(0);
+                compRef.instance.setPasteAfterMode(Constants.CLIPBOARDMODE_INVALID);
+              }
+            }
+            compRef.changeDetectorRef.detectChanges();
+          }
+        }
+     
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   ngOnInit() {
@@ -207,6 +241,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           compRef.changeDetectorRef.detectChanges();
           currentElement.style.outlineOffset = '4px';
           currentElement.style.border = '2px solid rgb(244, 124, 0)';
+          this.updateFromContaoClipboard(e, frameContentWindow, compRef);
         }
       } else {
         let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
@@ -219,6 +254,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
               compRef.changeDetectorRef.detectChanges();
               closestElement.style.outlineOffset = '4px';
               closestElement.style.border = '2px solid rgb(244, 124, 0)';
+              this.updateFromContaoClipboard(e, frameContentWindow, compRef);
             }
           }
         }
