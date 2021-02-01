@@ -16,6 +16,7 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
   @Input() id: string = '';
   @Input() pasteafterid: number = 0;
   @Input() pasteAfterMode: string = Constants.CLIPBOARDMODE_INVALID;
+  @Input() pasteAfterTarget: string = Constants.CLIPBOARDMODE_PASTETARGET_CE;
 
   @Input() pageEdit: boolean = false;
   @Input() pageId: number = 0;
@@ -27,9 +28,8 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
 
   private generteRequestUrl(): string {
     let url: string = '';
-    if (this.targetType === Constants.TARGETTYPE_CE) {
-      // https://contao.local:8890/contao?do=article&table=tl_content&id=234&act=copy&mode=1&pid=234&rt=oKoDxE5y71cRvpg4w29vrNqxNeqbEUQWMza_kvsmnYs&ref=POG7YPs7
-      url = '/contao?do=' + this.do + '&table=tl_content&act=' + this.pasteAfterMode + '&mode=1&pid=' + this.id + '&id=' + this.pasteafterid + '&rt=' + this.rt;
+    if (this.targetType === Constants.TARGETTYPE_CE || this.targetType === Constants.TARGETTYPE_ARTICLE) {
+      url = '/contao?do=' + this.do + '&table=tl_content&act=' + this.pasteAfterMode + '&mode=' + this.pasteAfterTarget + '&pid=' + this.id + '&id=' + this.pasteafterid + '&rt=' + this.rt;
     }
     return url;
   }
@@ -37,7 +37,9 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
   ngOnChanges() {
     this.show = false;
     if (this.pasteAfterMode === Constants.CLIPBOARDMODE_CUT) {
-      if (this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id)) {
+      if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_CE && this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id)) {
+        this.show = true;
+      } else if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_ARTICLE && this.pasteafterid !== 0) {
         this.show = true;
       }
     } else if (this.pasteAfterMode === Constants.CLIPBOARDMODE_COPY) {
