@@ -52,6 +52,7 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
     this.dispatchEvent({
       reloadFrame: true,
       preRequestGet: true,
+      updateBag: true,
       url: url,
       dialog: false,
       action: this.action,

@@ -14,6 +14,8 @@
     <app-item-article [title]="objLabels.article_edit_top" [action]="ACTION_ELEMENT_SHOW"
         [targetType]="TARGETTYPE_ARTICLE" [do]="TARGETTYPE_ARTICLE" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-article>
+    <app-item-clipboard [title]="objLabels.article_edit_top" [pasteafterid]="pasteAfterId"
+        [pasteAfterMode]="pasteAfterMode"> </app-item-clipboard>
     <div [style.clear]="'both'"></div>
 </div>
 
@@ -106,8 +108,8 @@
     </app-item-custom-module>
     <app-item-paste-after *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.cut_drag_element"
         [action]="ACTION_ELEMENT_PASTEAFTER" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
-        [id]="jsonDataElement.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base"
-        [rt]="rt">
+        [id]="jsonDataElement.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode" [pageEdit]="pageEdit"
+        [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-paste-after>
     <div [style.clear]="'both'"></div>
 </div>

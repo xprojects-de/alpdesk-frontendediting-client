@@ -20,6 +20,7 @@ export class Constants {
     public static ACTION_ELEMENT_DRAG = 'element_drag';
     public static ACTION_ELEMENT_PASTEAFTER = 'element_pasteafter';
     public static ACTION_CLIPBOARD = 'clipboard';
+    public static ACTION_NEWRECORDS = 'new_records';
 
     public static CLIPBOARDMODE_INVALID = '-';
     public static CLIPBOARDMODE_COPY = 'copy';

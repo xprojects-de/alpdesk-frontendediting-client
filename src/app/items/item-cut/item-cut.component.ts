@@ -24,6 +24,7 @@ export class ItemCutComponent extends BaseItemComponent {
   click() {
     this.dispatchEvent({
       preRequestPost: true,
+      updateClipboard: true,
       rt: this.rt,
       url: '/contao/alpdeskfee',
       dialog: false,

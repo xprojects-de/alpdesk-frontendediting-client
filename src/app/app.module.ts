@@ -33,6 +33,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ItemCutComponent } from './items/item-cut/item-cut.component';
 import { ItemDragComponent } from './items/item-drag/item-drag.component';
 import { ItemPasteAfterComponent } from './items/item-paste-after/item-paste-after.component';
+import { ItemClipboardComponent } from './items/item-clipboard/item-clipboard.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ItemPasteAfterComponent } from './items/item-paste-after/item-paste-aft
     ItemBarDirective,
     ItemCutComponent,
     ItemDragComponent,
-    ItemPasteAfterComponent
+    ItemPasteAfterComponent,
+    ItemClipboardComponent
   ],
   imports: [
     BrowserModule,
