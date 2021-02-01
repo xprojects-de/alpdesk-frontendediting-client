@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
 import { Constants } from './classes/constants';
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     //console.log(event.detail);
     if (event.detail.preRequestGet !== null && event.detail.preRequestGet !== undefined && event.detail.preRequestGet === true) {
       let params = event.detail;
-      params.preRequestGet = false;
+      params.preRequestGet = false;    
       this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
         (data) => {
           //console.log(data); 
@@ -34,6 +35,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           if (params.updateClipboard !== undefined && params.updateClipboard !== null && params.updateClipboard === true) {
             this.updateFromContaoClipboard();
+          }
+          if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
+            this.showSnackBar(event.detail.snackMsg);
           }
           document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
@@ -57,6 +61,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           if (params.updateClipboard !== undefined && params.updateClipboard !== null && params.updateClipboard === true) {
             this.updateFromContaoClipboard();
+          }
+          if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
+            this.showSnackBar(event.detail.snackMsg);
           }
           document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
@@ -99,7 +106,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService) {
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
   }
 
   private updateFromContaoClipboard() {
@@ -251,6 +258,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alpdeskfeeframespinner.nativeElement.style.display = 'none';
       }
     }
+  }
+
+  showSnackBar(msg: string, durationValue: number = 3000) {
+    this.snackBar.open(msg, '', { duration: durationValue });
   }
 
   private prepareElement(e: HTMLElement, frameContentWindow: any, event: Event) {
