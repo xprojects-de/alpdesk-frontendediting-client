@@ -52,6 +52,11 @@
         [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [pageEdit]="pageEdit"
         [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-new>
+    <app-item-paste-after [title]="objLabels.paste_element"
+        [action]="ACTION_ELEMENT_PASTEAFTER" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
+        [id]="jsonDataParent.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode"
+        [pasteAfterTarget]="CLIPBOARDMODE_PASTETARGET_ARTICLE" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
+    </app-item-paste-after>
     <div [style.clear]="'both'"></div>
 </div>
 
@@ -108,7 +113,7 @@
     </app-item-custom-module>
     <app-item-paste-after *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.paste_element"
         [action]="ACTION_ELEMENT_PASTEAFTER" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
-        [id]="jsonDataElement.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode" [pageEdit]="pageEdit"
+        [id]="jsonDataElement.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode" [pasteAfterTarget]="CLIPBOARDMODE_PASTETARGET_CE" [pageEdit]="pageEdit"
         [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-paste-after>
     <div [style.clear]="'both'"></div>
