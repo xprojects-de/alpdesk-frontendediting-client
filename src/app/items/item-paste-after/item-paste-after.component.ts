@@ -28,7 +28,7 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
 
   private generteRequestUrl(): string {
     let url: string = '';
-    if (this.targetType === Constants.TARGETTYPE_CE) {
+    if (this.targetType === Constants.TARGETTYPE_CE || this.targetType === Constants.TARGETTYPE_ARTICLE) {
       url = '/contao?do=' + this.do + '&table=tl_content&act=' + this.pasteAfterMode + '&mode=' + this.pasteAfterTarget + '&pid=' + this.id + '&id=' + this.pasteafterid + '&rt=' + this.rt;
     }
     return url;
