@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
+import { Constants } from 'src/app/classes/constants';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
-  selector: 'app-item-copy',
-  templateUrl: './item-copy.component.html',
-  styleUrls: ['./item-copy.component.scss']
+  selector: 'app-item-cut',
+  templateUrl: './item-cut.component.html',
+  styleUrls: ['./item-cut.component.scss']
 })
-export class ItemCopyComponent extends BaseItemComponent {
+export class ItemCutComponent extends BaseItemComponent {
 
   @Input() title: string = '';
   @Input() snackTitle: string = '';
@@ -14,7 +15,6 @@ export class ItemCopyComponent extends BaseItemComponent {
   @Input() targetType: string = '';
   @Input() do: string = '';
   @Input() id: string = '';
-  @Input() pid: string = '';
 
   @Input() pageEdit: boolean = false;
   @Input() pageId: number = 0;
@@ -34,7 +34,6 @@ export class ItemCopyComponent extends BaseItemComponent {
       targetType: this.targetType,
       do: this.do,
       id: this.id,
-      pid: this.pid,
       pageEdit: this.pageEdit,
       pageId: this.pageId
     });

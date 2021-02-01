@@ -2,14 +2,13 @@ import { Component, Input } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
-  selector: 'app-item-copy',
-  templateUrl: './item-copy.component.html',
-  styleUrls: ['./item-copy.component.scss']
+  selector: 'app-item-drag',
+  templateUrl: './item-drag.component.html',
+  styleUrls: ['./item-drag.component.scss']
 })
-export class ItemCopyComponent extends BaseItemComponent {
+export class ItemDragComponent extends BaseItemComponent {
 
   @Input() title: string = '';
-  @Input() snackTitle: string = '';
   @Input() action: string = '';
   @Input() targetType: string = '';
   @Input() do: string = '';
@@ -25,11 +24,9 @@ export class ItemCopyComponent extends BaseItemComponent {
   click() {
     this.dispatchEvent({
       preRequestPost: true,
-      updateClipboard: true,
-      snackMsg: this.snackTitle + ': ID ' + this.id,
       rt: this.rt,
       url: '/contao/alpdeskfee',
-      dialog: false,
+      dialog: true,
       action: this.action,
       targetType: this.targetType,
       do: this.do,

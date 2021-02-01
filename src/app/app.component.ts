@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { fromEvent, Subscription } from 'rxjs';
 import { Constants } from './classes/constants';
 import { UrlGenerator } from './classes/url-generator';
+import { ContaoClipboardCommon } from './interfaces/contao-clipboard';
 import { ItemContainerComponent } from './item-container/item-container.component';
 import { AlpdeskFeeServiceService } from './services/alpdesk-fee-service.service';
 import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
@@ -17,17 +19,26 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'jYcwNfzAaUfvOAiYM46xFsiBd--PKikQGBrQ60L93Ac';
+  @Input('rt') rt: string = '88nEd_jNFZlIEIwwvLq_WJ_hU6N85g2rgk0lwmS86zo';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     //console.log(event.detail);
     if (event.detail.preRequestGet !== null && event.detail.preRequestGet !== undefined && event.detail.preRequestGet === true) {
       let params = event.detail;
-      params.preRequestGet = false;
+      params.preRequestGet = false;    
       this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
         (data) => {
-          //console.log(data);
+          //console.log(data); 
+          if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
+            this.updateFromContaoBag();
+          }
+          if (params.updateClipboard !== undefined && params.updateClipboard !== null && params.updateClipboard === true) {
+            this.updateFromContaoClipboard();
+          }
+          if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
+            this.showSnackBar(event.detail.snackMsg);
+          }
           document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
           }));
@@ -44,6 +55,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       params.preRequestPost = false;
       this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(
         (data) => {
+          //console.log(data);
+          if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
+            this.updateFromContaoBag();
+          }
+          if (params.updateClipboard !== undefined && params.updateClipboard !== null && params.updateClipboard === true) {
+            this.updateFromContaoClipboard();
+          }
+          if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
+            this.showSnackBar(event.detail.snackMsg);
+          }
           document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
           }));
@@ -67,6 +88,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
   @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
 
+  private compRef!: ComponentRef<ItemContainerComponent>;
+
   title = 'alpdeskfee-client';
   url: any;
 
@@ -83,7 +106,58 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService) {
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
+  }
+
+  private updateFromContaoClipboard() {
+    if (this.compRef !== undefined && this.compRef !== null) {
+      const data: any = {
+        rt: this.rt,
+        action: Constants.ACTION_CLIPBOARD,
+        targetType: Constants.TARGETTYPE_INFO
+      };
+      this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
+        (clipboard: ContaoClipboardCommon) => {
+          //console.log(clipboard);
+          if (clipboard !== null && clipboard !== undefined) {
+            // parse tl_content clipboard
+            if (clipboard.tl_content !== null && clipboard.tl_content !== undefined) {
+              if (clipboard.tl_content.id !== 0) {
+                if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
+                  this.compRef.instance.setPasteAfterId(clipboard.tl_content.id);
+                  this.compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
+                } else {
+                  this.compRef.instance.setPasteAfterId(0);
+                  this.compRef.instance.setPasteAfterMode(Constants.CLIPBOARDMODE_INVALID);
+                }
+              }
+              this.compRef.changeDetectorRef.detectChanges();
+            }
+          }
+
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  private updateFromContaoBag() {
+    const data: any = {
+      rt: this.rt,
+      action: Constants.ACTION_NEWRECORDS,
+      targetType: Constants.TARGETTYPE_INFO,
+      updateContentRecords: true
+    };
+    this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
+      (bag: any) => {
+        //console.log(bag);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   ngOnInit() {
@@ -177,8 +251,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   showHideSpinner(show: boolean) {
-    if(this.alpdeskfeeframespinner !== null && this.alpdeskfeeframespinner !== undefined) {
-      if(show) {
+    if (this.alpdeskfeeframespinner !== null && this.alpdeskfeeframespinner !== undefined) {
+      if (show) {
         this.alpdeskfeeframespinner.nativeElement.style.display = 'block';
       } else {
         this.alpdeskfeeframespinner.nativeElement.style.display = 'none';
@@ -186,7 +260,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private prepareElement(e: HTMLElement, frameContentWindow: any, compRef: ComponentRef<ItemContainerComponent>, event: Event) {
+  showSnackBar(msg: string, durationValue: number = 4000) {
+    this.snackBar.open(msg, '', { duration: durationValue });
+  }
+
+  private prepareElement(e: HTMLElement, frameContentWindow: any, event: Event) {
     let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
     cData.forEach((eC: HTMLElement) => {
       if (eC !== e) {
@@ -203,10 +281,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
         const objElement = JSON.parse(jsonDataElement);
         if (objElement !== null && objElement !== undefined) {
-          compRef.instance.changeElement(objElement, currentElement);
-          compRef.changeDetectorRef.detectChanges();
+          this.compRef.instance.changeElement(objElement, currentElement);
+          this.compRef.changeDetectorRef.detectChanges();
           currentElement.style.outlineOffset = '4px';
           currentElement.style.border = '2px solid rgb(244, 124, 0)';
+          this.updateFromContaoClipboard();
         }
       } else {
         let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
@@ -215,10 +294,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
           if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
             const objElement = JSON.parse(jsonDataElement);
             if (objElement !== null && objElement !== undefined) {
-              compRef.instance.changeElement(objElement, closestElement);
-              compRef.changeDetectorRef.detectChanges();
+              this.compRef.instance.changeElement(objElement, closestElement);
+              this.compRef.changeDetectorRef.detectChanges();
               closestElement.style.outlineOffset = '4px';
               closestElement.style.border = '2px solid rgb(244, 124, 0)';
+              this.updateFromContaoClipboard();
             }
           }
         }
@@ -236,15 +316,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       if (frameContentWindow !== null && frameContentWindow !== undefined && frameContentDocument !== null && frameContentDocument !== undefined) {
 
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
-        const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
-        compRef.instance.frameContentDocument = frameContentDocument;
-        compRef.instance.base = this.base;
-        compRef.instance.rt = this.rt;
-        compRef.instance.objLabels = objLabels;
-        compRef.instance.pageEdit = pageEdit;
-        compRef.instance.pageId = pageId;
+        this.compRef = this.vcRef.createComponent(compFactory);
+        this.compRef.instance.frameContentDocument = frameContentDocument;
+        this.compRef.instance.base = this.base;
+        this.compRef.instance.rt = this.rt;
+        this.compRef.instance.objLabels = objLabels;
+        this.compRef.instance.pageEdit = pageEdit;
+        this.compRef.instance.pageId = pageId;
 
-        frameContentDocument.body.prepend(compRef.location.nativeElement);
+        frameContentDocument.body.prepend(this.compRef.location.nativeElement);
 
         let data = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
         data.forEach((e: HTMLElement) => {
@@ -259,8 +339,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                   parentNode.classList.add('alpdeskfee-article-container');
                   const parentClick$ = fromEvent<MouseEvent>(parentNode, "click").subscribe((event: Event) => {
                     if (parentNode !== null) {
-                      compRef.instance.changeParent(obj, parentNode);
-                      compRef.changeDetectorRef.detectChanges();
+                      this.compRef.instance.changeParent(obj, parentNode);
+                      this.compRef.changeDetectorRef.detectChanges();
                     }
                   });
                   this.subscriptions.push(parentClick$);
@@ -278,12 +358,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
                 this.subscriptions.push(elementMouseout$);
                 const elementClick$ = fromEvent<MouseEvent>(e, "click").subscribe((event: Event) => {
-                  this.prepareElement(e, frameContentWindow, compRef, event);
+                  this.prepareElement(e, frameContentWindow, event);
                 });
                 this.subscriptions.push(elementClick$);
                 const elementContext$ = fromEvent<MouseEvent>(e, "contextmenu").subscribe((event: Event) => {
                   event.preventDefault();
-                  this.prepareElement(e, frameContentWindow, compRef, event);
+                  this.prepareElement(e, frameContentWindow, event);
                 });
                 this.subscriptions.push(elementContext$);
               }
