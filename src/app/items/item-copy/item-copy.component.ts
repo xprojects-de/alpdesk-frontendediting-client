@@ -9,6 +9,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 export class ItemCopyComponent extends BaseItemComponent {
 
   @Input() title: string = '';
+  @Input() snackTitle: string = '';
   @Input() action: string = '';
   @Input() targetType: string = '';
   @Input() do: string = '';
@@ -25,7 +26,7 @@ export class ItemCopyComponent extends BaseItemComponent {
     this.dispatchEvent({
       preRequestPost: true,
       updateClipboard: true,
-      snackMsg: this.title + ': ID ' + this.id,
+      snackMsg: this.snackTitle + ': ID ' + this.id,
       rt: this.rt,
       url: '/contao/alpdeskfee',
       dialog: false,

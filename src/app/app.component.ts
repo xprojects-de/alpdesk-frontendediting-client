@@ -260,7 +260,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  showSnackBar(msg: string, durationValue: number = 3000) {
+  showSnackBar(msg: string, durationValue: number = 4000) {
     this.snackBar.open(msg, '', { duration: durationValue });
   }
 

@@ -78,12 +78,14 @@
         [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-edit>
     <app-item-copy *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.copy_element"
-        [action]="ACTION_ELEMENT_COPY" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do" [id]="jsonDataElement.id"
-        [pid]="jsonDataElement.pid" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
+        [snackTitle]="objLabels.clipboard_element_copy" [action]="ACTION_ELEMENT_COPY" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid" [pageEdit]="pageEdit"
+        [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-copy>
     <app-item-cut *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.cut_drag_element"
-        [action]="ACTION_ELEMENT_CUT" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do" [id]="jsonDataElement.id"
-        [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
+        [snackTitle]="objLabels.clipboard_element_cut" [action]="ACTION_ELEMENT_CUT" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base"
+        [rt]="rt">
     </app-item-cut>
     <app-item-publish *ngIf="jsonDataElement.canEdit === true && jsonDataElement.canPublish === true"
         [title]="objLabels.element_visible" [action]="ACTION_ELEMENT_VISIBILITY" [targetType]="TARGETTYPE_CE"
@@ -104,7 +106,7 @@
         [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
         [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-custom-module>
-    <app-item-paste-after *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.cut_drag_element"
+    <app-item-paste-after *ngIf="jsonDataElement.canEdit === true" [title]="objLabels.paste_element"
         [action]="ACTION_ELEMENT_PASTEAFTER" [targetType]="TARGETTYPE_CE" [do]="jsonDataElement.do"
         [id]="jsonDataElement.id" [pasteafterid]="pasteAfterId" [pasteAfterMode]="pasteAfterMode" [pageEdit]="pageEdit"
         [pageId]="pageId" [base]="base" [rt]="rt">
