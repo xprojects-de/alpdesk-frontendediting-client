@@ -8,6 +8,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class ItemCopyComponent extends BaseItemComponent {
 
+  @Input() access: boolean = true;
   @Input() title: string = '';
   @Input() snackTitle: string = '';
   @Input() action: string = '';

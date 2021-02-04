@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'ZHKh_YzYjqtpzAthJOdDzbVy9WbhCjNM8wnQCb7T4ls';
+  @Input('rt') rt: string = '5VJN3COp-uARzsAkq57ljOd-EzHOLDK3NNz3lFkNo-c';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
@@ -161,7 +161,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.framecontainerInitHeight = (window.innerHeight - 210);
+    this.framecontainerInitHeight = (window.innerHeight - 160);
     this.framecontainerInitHeightString = this.framecontainerInitHeight + 'px';
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
     this.frameUrlContent = this.frameurl;

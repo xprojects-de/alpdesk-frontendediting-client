@@ -27,8 +27,6 @@ export class UrlGenerator {
                 url = '/contao?alpdeskmodal=1&popup=1&alpdesk_hideheader=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.do + '&table=tl_content&rt=' + rt + '&id=' + data.pid;
             } else if (data.action === Constants.ACTION_ELEMENT_EDIT) {
                 url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&table=tl_content&rt=' + rt + '&act=edit&id=' + data.id;
-            } else if (data.action === Constants.ACTION_ELEMENT_COPY) {
-                url = '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.do + '&table=tl_content&rt=' + rt + '&id=' + data.pid;
             } else if (data.action === Constants.ACTION_ELEMENT_NEW) {
                 url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + rt;
             }
