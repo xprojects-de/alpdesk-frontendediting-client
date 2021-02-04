@@ -161,7 +161,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.framecontainerInitHeight = (window.innerHeight - 210);
+    this.framecontainerInitHeight = (window.innerHeight - 160);
     this.framecontainerInitHeightString = this.framecontainerInitHeight + 'px';
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
     this.frameUrlContent = this.frameurl;
