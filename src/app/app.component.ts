@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'kC_58Qv0s8MO0PbKZY9JoKqeidTC7Kar2pMfHg5Mmz0';
+  @Input('rt') rt: string = 'KkPfWF21d-xI0VzhFpZXLuRLiPFDN2s_HNpMgw-uaKo';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
@@ -59,9 +59,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(
         (data) => {
           //console.log(data);
-          if(data.status != 200) {
-            this.showSnackBar('An error has occurred');
-          }
           if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
             this.updateFromContaoBag();
           }
