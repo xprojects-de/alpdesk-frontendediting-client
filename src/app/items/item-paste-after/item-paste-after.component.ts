@@ -18,6 +18,7 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
   @Input() pasteafterid: number = 0;
   @Input() pasteAfterMode: string = Constants.CLIPBOARDMODE_INVALID;
   @Input() pasteAfterTarget: string = Constants.CLIPBOARDMODE_PASTETARGET_CE;
+  @Input() pasteAfterPtable: string = Constants.CLIPBOARDPTABLE_INVALID;
 
   @Input() pageEdit: boolean = false;
   @Input() pageId: number = 0;
@@ -36,18 +37,30 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
   }
 
   ngOnChanges() {
+
     this.show = false;
+    let tmp = false;
+    
     if (this.pasteAfterMode === Constants.CLIPBOARDMODE_CUT) {
       if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_CE && this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id) && this.parentaccess === true) {
-        this.show = true;
+        tmp = true;
       } else if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_ARTICLE && this.pasteafterid !== 0 && this.parentaccess === true) {
-        this.show = true;
+        tmp= true;
       }
     } else if (this.pasteAfterMode === Constants.CLIPBOARDMODE_COPY) {
       if (this.pasteafterid !== 0 && this.parentaccess === true) {
-        this.show = true;
+        tmp = true;
       }
     }
+
+    if(tmp === true && this.pasteAfterPtable !== Constants.CLIPBOARDPTABLE_INVALID) {
+      if(this.pasteAfterPtable !== this.do) {
+        tmp = false;
+      }
+    }
+
+    this.show = tmp;
+
   }
 
   click() {

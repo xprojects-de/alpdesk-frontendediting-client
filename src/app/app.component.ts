@@ -132,9 +132,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
                   this.compRef.instance.setPasteAfterId(clipboard.tl_content.id);
                   this.compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
+                  if(clipboard.tl_content.alpdeskptable !== undefined && clipboard.tl_content.alpdeskptable !== null) {
+                    this.compRef.instance.setPasteAfterPTable(clipboard.tl_content.alpdeskptable);
+                  } else {
+                    this.compRef.instance.setPasteAfterPTable(Constants.CLIPBOARDPTABLE_INVALID);
+                  }
                 } else {
                   this.compRef.instance.setPasteAfterId(0);
                   this.compRef.instance.setPasteAfterMode(Constants.CLIPBOARDMODE_INVALID);
+                  this.compRef.instance.setPasteAfterPTable(Constants.CLIPBOARDPTABLE_INVALID);
                 }
               }
               this.compRef.changeDetectorRef.detectChanges();
