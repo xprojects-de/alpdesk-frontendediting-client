@@ -25,6 +25,7 @@ export class Constants {
     public static CLIPBOARDMODE_INVALID = '-';
     public static CLIPBOARDMODE_COPY = 'copy';
     public static CLIPBOARDMODE_CUT = 'cut';
+    public static CLIPBOARDPTABLE_INVALID = '-';
 
     public static CLIPBOARDMODE_PASTETARGET_CE = '1';
     public static CLIPBOARDMODE_PASTETARGET_ARTICLE = '2';

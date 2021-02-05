@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = '5VJN3COp-uARzsAkq57ljOd-EzHOLDK3NNz3lFkNo-c';
+  @Input('rt') rt: string = 'KkPfWF21d-xI0VzhFpZXLuRLiPFDN2s_HNpMgw-uaKo';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
@@ -29,7 +29,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       params.preRequestGet = false;    
       this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
         (data) => {
-          //console.log(data); 
+          //console.log(data);
+          if(data.status != 200) {
+            this.showSnackBar('An error has occurred');
+          }
           if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
             this.updateFromContaoBag();
           }
@@ -126,9 +129,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
                   this.compRef.instance.setPasteAfterId(clipboard.tl_content.id);
                   this.compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
+                  if(clipboard.tl_content.alpdeskptable !== undefined && clipboard.tl_content.alpdeskptable !== null) {
+                    this.compRef.instance.setPasteAfterPTable(clipboard.tl_content.alpdeskptable);
+                  } else {
+                    this.compRef.instance.setPasteAfterPTable(Constants.CLIPBOARDPTABLE_INVALID);
+                  }
                 } else {
                   this.compRef.instance.setPasteAfterId(0);
                   this.compRef.instance.setPasteAfterMode(Constants.CLIPBOARDMODE_INVALID);
+                  this.compRef.instance.setPasteAfterPTable(Constants.CLIPBOARDPTABLE_INVALID);
                 }
               }
               this.compRef.changeDetectorRef.detectChanges();

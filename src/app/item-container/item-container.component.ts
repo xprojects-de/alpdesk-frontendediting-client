@@ -61,6 +61,7 @@ export class ItemContainerComponent {
 
   pasteAfterId = 0;
   pasteAfterMode = '';
+  pasteAfterPtable = Constants.CLIPBOARDPTABLE_INVALID;
 
   constructor() { }
 
@@ -147,6 +148,10 @@ export class ItemContainerComponent {
 
   setPasteAfterMode(value: string) {
     this.pasteAfterMode = value;
+  }
+
+  setPasteAfterPTable(value: string) {
+    this.pasteAfterPtable = value;
   }
 
   clearActiveElements() {
