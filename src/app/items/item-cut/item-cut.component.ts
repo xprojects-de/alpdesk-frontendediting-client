@@ -9,6 +9,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class ItemCutComponent extends BaseItemComponent {
 
+  @Input() parentaccess: boolean = true;
   @Input() title: string = '';
   @Input() snackTitle: string = '';
   @Input() action: string = '';

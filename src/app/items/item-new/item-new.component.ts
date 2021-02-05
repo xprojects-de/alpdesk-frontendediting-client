@@ -8,6 +8,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class ItemNewComponent extends BaseItemComponent {
 
+  @Input() parentaccess: boolean = true;
   @Input() title: string = '';
   @Input() action: string = '';
   @Input() targetType: string = '';

@@ -9,6 +9,7 @@ import { BaseItemComponent } from '../base-item/base-item.component';
 })
 export class ItemPasteAfterComponent extends BaseItemComponent implements OnChanges {
 
+  @Input() parentaccess: boolean = true;
   @Input() title: string = '';
   @Input() action: string = '';
   @Input() targetType: string = '';
@@ -37,13 +38,13 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
   ngOnChanges() {
     this.show = false;
     if (this.pasteAfterMode === Constants.CLIPBOARDMODE_CUT) {
-      if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_CE && this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id)) {
+      if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_CE && this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id) && this.parentaccess === true) {
         this.show = true;
-      } else if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_ARTICLE && this.pasteafterid !== 0) {
+      } else if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_ARTICLE && this.pasteafterid !== 0 && this.parentaccess === true) {
         this.show = true;
       }
     } else if (this.pasteAfterMode === Constants.CLIPBOARDMODE_COPY) {
-      if (this.pasteafterid !== 0) {
+      if (this.pasteafterid !== 0 && this.parentaccess === true) {
         this.show = true;
       }
     }

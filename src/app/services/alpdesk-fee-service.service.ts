@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { catchError, retry} from 'rxjs/operators';
 import { of } from 'rxjs';
+import { CallError } from '../interfaces/call-error';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AlpdeskFeeServiceService {
     }));
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(result?: T) {
     return (error: any): Observable<T> => {
       console.log(error);
       return of(result as T);
@@ -36,9 +37,9 @@ export class AlpdeskFeeServiceService {
     const body = { data: JSON.stringify(data), rt: data.rt };
     //console.log(body);
     //console.log(url);
-
+    const callError: CallError = { error: true };
     return this._httpClient.post(url, body, options).pipe(
-      retry(1), catchError(this.handleError<any[]>('call', undefined))
+      retry(1), catchError(this.handleError<CallError>(callError))
     );
   }
 
@@ -47,8 +48,9 @@ export class AlpdeskFeeServiceService {
     const httpHeaders: HttpHeaders = new HttpHeaders({
       'Content-Type': 'text/plain'
     });
+    const callError: CallError = { error: true };
     return this._httpClient.get(url, { headers: httpHeaders, observe: 'response', responseType: 'text' }).pipe(
-      retry(1), catchError(this.handleError<any[]>('call', undefined))
+      retry(1), catchError(this.handleError<CallError>(callError))
     );
   }
 
