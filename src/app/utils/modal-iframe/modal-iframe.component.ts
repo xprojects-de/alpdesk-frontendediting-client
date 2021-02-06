@@ -19,6 +19,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
 
   private saveNcloseTrigger = false;
   private saveNclose$!: Subscription;
+  private saveNcloseUrl = '';
   private save$!: Subscription;
 
   url: any;
@@ -46,13 +47,24 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
   }
 
   iframeLoad() {
+
     if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
+
       this.alpdeskfeemodalspinner.nativeElement.style.display = 'none';
-      if (this.saveNcloseTrigger === true) {
-        this.saveNcloseTrigger = false;
+
+      // not so nice but currently working
+      let validReloadResponse = true;
+      if (this.saveNcloseUrl !== '') {
+        validReloadResponse = (this.saveNcloseUrl !== this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href);
+      }
+      this.saveNcloseUrl = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
+
+      if (this.saveNcloseTrigger === true && validReloadResponse === true) {        
         this.dialogRef.close();
       } else {
 
+        this.saveNcloseTrigger = false;
+        this.alpdeskfeemodalframe.nativeElement.style.opacity = '1';
         this.unsubscribeListeners();
 
         let saveNClose: HTMLElement = this.alpdeskfeemodalframe.nativeElement.contentWindow.document.getElementById('saveNclose');
