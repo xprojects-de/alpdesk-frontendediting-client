@@ -19,32 +19,30 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'KkPfWF21d-xI0VzhFpZXLuRLiPFDN2s_HNpMgw-uaKo';
+  @Input('rt') rt: string = 'lKgY3c9Ii5LVn3-i2OOkfN8H-QPpYJRUL4AQX-iqgcA';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     //console.log(event.detail);
     if (event.detail.preRequestGet !== null && event.detail.preRequestGet !== undefined && event.detail.preRequestGet === true) {
       let params = event.detail;
-      params.preRequestGet = false;    
+      params.preRequestGet = false;
       this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
         (data) => {
           //console.log(data);
-          if(data.status != 200) {
+          if (data.status != 200) {
             this.showSnackBar('An error has occurred');
-          }
-          if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
-            this.updateFromContaoBag();
-          }
-          if (params.updateClipboard !== undefined && params.updateClipboard !== null && params.updateClipboard === true) {
-            this.updateFromContaoClipboard();
           }
           if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
             this.showSnackBar(event.detail.snackMsg);
           }
-          document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
-            detail: params
-          }));
+          if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
+            this.updateFromContaoBag(params);
+          } else {
+            document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+              detail: params
+            }));
+          }
         },
         (error) => {
           console.log(error);
@@ -59,18 +57,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
       this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(
         (data) => {
           //console.log(data);
-          if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
-            this.updateFromContaoBag();
+          if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
+            this.showSnackBar(event.detail.snackMsg);
           }
           if (params.updateClipboard !== undefined && params.updateClipboard !== null && params.updateClipboard === true) {
             this.updateFromContaoClipboard();
           }
-          if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
-            this.showSnackBar(event.detail.snackMsg);
-          }
           document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
           }));
+
         },
         (error) => {
           console.log(error);
@@ -129,7 +125,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
                   this.compRef.instance.setPasteAfterId(clipboard.tl_content.id);
                   this.compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
-                  if(clipboard.tl_content.alpdeskptable !== undefined && clipboard.tl_content.alpdeskptable !== null) {
+                  if (clipboard.tl_content.alpdeskptable !== undefined && clipboard.tl_content.alpdeskptable !== null) {
                     this.compRef.instance.setPasteAfterPTable(clipboard.tl_content.alpdeskptable);
                   } else {
                     this.compRef.instance.setPasteAfterPTable(Constants.CLIPBOARDPTABLE_INVALID);
@@ -152,7 +148,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private updateFromContaoBag() {
+  private updateFromContaoBag(params: any) {
     const data: any = {
       rt: this.rt,
       action: Constants.ACTION_NEWRECORDS,
@@ -162,9 +158,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
       (bag: any) => {
         //console.log(bag);
+        document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+          detail: params
+        }));
       },
       (error) => {
         console.log(error);
+        this.showSnackBar('An error has occurred');
       }
     );
   }
