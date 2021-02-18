@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'CwnduNbosryP-8HpjQTvhP8kDzm-1lBC6YOciEXdAQM';
+  @Input('rt') rt: string = 'nnI7VkEVr40aAROhOB-FU2y0ajo5kAKA130BA90HcTo';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
@@ -231,7 +231,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     const dialogData: DialogData = { url: url };
 
     const dialogRef = this.dialog.open(ModalIframeComponent, {
-      width: '900px',
+      width: '80vw', 
+      height: '85vh',          
       data: dialogData
     });
 

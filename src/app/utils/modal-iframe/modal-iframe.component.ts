@@ -23,10 +23,10 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
   private save$!: Subscription;
 
   url: any;
-  height = 550;
+  height = 600;
 
   constructor(private _sanitizer: DomSanitizer, public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) {
-    //this.height = (window.innerHeight - 10);
+    //this.height = (window.innerHeight * 0.9);
   }
 
   ngOnInit() {
