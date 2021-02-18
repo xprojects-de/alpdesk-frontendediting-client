@@ -21,13 +21,13 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
   private saveNclose$!: Subscription;
   private saveNcloseUrl = '';
   private save$!: Subscription;
+  private history: string[] = [];
+  private historyInit: string = '';
 
   url: any;
-  height = 600;
+  showBack = false;
 
-  constructor(private _sanitizer: DomSanitizer, public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) {
-    //this.height = (window.innerHeight * 0.9);
-  }
+  constructor(private _sanitizer: DomSanitizer, public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) { }
 
   ngOnInit() {
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);
@@ -52,14 +52,35 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
 
       this.alpdeskfeemodalspinner.nativeElement.style.display = 'none';
 
+      const currentURL: string = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
+
+      if (this.historyInit === currentURL) {
+        this.history = [];
+      }
+
+      if (this.history.length > 0) {
+        if (this.history[this.history.length - 1] !== currentURL) {
+          this.history.push(currentURL);
+        }
+      } else {
+        this.history.push(currentURL);
+        this.historyInit = currentURL;
+      }
+
+      if (this.history.length > 1) {
+        this.showBack = true;
+      } else {
+        this.showBack = false;
+      }
+
       // not so nice but currently working
       let validReloadResponse = true;
       if (this.saveNcloseUrl !== '') {
-        validReloadResponse = (this.saveNcloseUrl !== this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href);
+        validReloadResponse = (this.saveNcloseUrl !== currentURL);
       }
-      this.saveNcloseUrl = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
+      this.saveNcloseUrl = currentURL;
 
-      if (this.saveNcloseTrigger === true && validReloadResponse === true) {        
+      if (this.saveNcloseTrigger === true && validReloadResponse === true) {
         this.dialogRef.close();
       } else {
 
@@ -81,6 +102,20 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
           this.save$ = fromEvent<MouseEvent>(save, "click").subscribe((event: Event) => {
             this.alpdeskfeemodalspinner.nativeElement.style.display = 'block';
           });
+        }
+
+      }
+    }
+  }
+
+  back() {
+    if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
+      if (this.history.length > 0) {
+        this.alpdeskfeemodalspinner.nativeElement.style.display = 'block';
+        this.history.pop();
+        const historyUrl = this.history.pop();
+        if (historyUrl !== null && historyUrl !== undefined) {
+          this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href = historyUrl;
         }
 
       }
