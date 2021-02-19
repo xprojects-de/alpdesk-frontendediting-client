@@ -32,6 +32,8 @@ export class UrlGenerator {
             }
         } else if (data.targetType === Constants.TARGETTYPE_MOD) {
             url = '/contao?alpdeskmodal=1&popup=1&' + data.do + '&rt=' + rt;
+        } else if (data.targetType === Constants.TARGETTYPE_FILEMANAGEMENT) {
+            url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&rt=' + rt;
         }
 
         return url;

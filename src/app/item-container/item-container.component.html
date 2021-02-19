@@ -14,6 +14,9 @@
     <app-item-article [title]="objLabels.article_edit_top" [action]="ACTION_ELEMENT_SHOW"
         [targetType]="TARGETTYPE_ARTICLE" [do]="TARGETTYPE_ARTICLE" [pageEdit]="pageEdit" [pageId]="pageId">
     </app-item-article>
+    <app-item-filemanagement *ngIf="accessFilemanagement === true" [title]="objLabels.filemanagement" [targetType]="TARGETTYPE_FILEMANAGEMENT"
+        [do]="TARGETTYPE_FILEMANAGEMENT" [pageEdit]="pageEdit" [pageId]="pageId">
+    </app-item-filemanagement>
     <div [style.clear]="'both'"></div>
 </div>
 

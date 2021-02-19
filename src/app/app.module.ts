@@ -34,6 +34,7 @@ import { ItemCutComponent } from './items/item-cut/item-cut.component';
 import { ItemDragComponent } from './items/item-drag/item-drag.component';
 import { ItemPasteAfterComponent } from './items/item-paste-after/item-paste-after.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ItemFilemanagementComponent } from './items/item-filemanagement/item-filemanagement.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ItemBarDirective,
     ItemCutComponent,
     ItemDragComponent,
-    ItemPasteAfterComponent
+    ItemPasteAfterComponent,
+    ItemFilemanagementComponent
   ],
   imports: [
     BrowserModule,
