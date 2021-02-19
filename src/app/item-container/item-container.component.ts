@@ -23,6 +23,7 @@ export class ItemContainerComponent {
   objLabels: any;
   pageEdit: boolean = false;
   pageId: number = 0;
+  accessFilemanagement: boolean = false;
 
   elementParent!: HTMLElement;
   jsonDataParent: any;
@@ -43,6 +44,7 @@ export class ItemContainerComponent {
 
   TARGETTYPE_PAGE = Constants.TARGETTYPE_PAGE;
   TARGETTYPE_ARTICLE = Constants.TARGETTYPE_ARTICLE;
+  TARGETTYPE_FILEMANAGEMENT = Constants.TARGETTYPE_FILEMANAGEMENT;
   TARGETTYPE_CE = Constants.TARGETTYPE_CE;
   TARGETTYPE_MOD = Constants.TARGETTYPE_MOD;
 

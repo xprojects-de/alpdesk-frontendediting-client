@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'nnI7VkEVr40aAROhOB-FU2y0ajo5kAKA130BA90HcTo';
+  @Input('rt') rt: string = 'Mrpm2NHdwSsv30T00LVPwDZTvFBvDLLBZp5OXF7QY_4';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
@@ -73,7 +73,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       );
     } else if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
-      this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
+      this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId, event.detail.accessFilemanagement);
     } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
       this.openDialog(event.detail);
     } else if (event.detail.reloadFrame !== null && event.detail.reloadFrame !== undefined && event.detail.reloadFrame === true) {
@@ -316,7 +316,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
+  scanElements(objLabels: any, pageEdit: boolean, pageId: number, accessFilemanagement: boolean) {
 
     if (objLabels !== null && objLabels !== undefined) {
 
@@ -333,6 +333,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.compRef.instance.objLabels = objLabels;
         this.compRef.instance.pageEdit = pageEdit;
         this.compRef.instance.pageId = pageId;
+        this.compRef.instance.accessFilemanagement = accessFilemanagement;
 
         frameContentDocument.body.prepend(this.compRef.location.nativeElement);
 

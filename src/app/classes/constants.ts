@@ -4,6 +4,7 @@ export class Constants {
     
     public static TARGETTYPE_PAGE = 'page';
     public static TARGETTYPE_ARTICLE = 'article';
+    public static TARGETTYPE_FILEMANAGEMENT = 'files';
     public static TARGETTYPE_CE = 'ce';
     public static TARGETTYPE_MOD = 'mod';
     public static TARGETTYPE_INFO = 'info';

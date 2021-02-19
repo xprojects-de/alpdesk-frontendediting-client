@@ -53,18 +53,21 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
       this.alpdeskfeemodalspinner.nativeElement.style.display = 'none';
 
       const currentURL: string = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
+      const historyInvalidUrl: boolean = (currentURL.indexOf('mode=copy') > 0 || currentURL.indexOf('mode=cut') > 0);
 
       if (this.historyInit === currentURL) {
         this.history = [];
       }
 
-      if (this.history.length > 0) {
-        if (this.history[this.history.length - 1] !== currentURL) {
+      if (historyInvalidUrl === false) {
+        if (this.history.length > 0) {
+          if (this.history[this.history.length - 1] !== currentURL) {
+            this.history.push(currentURL);
+          }
+        } else {
           this.history.push(currentURL);
+          this.historyInit = currentURL;
         }
-      } else {
-        this.history.push(currentURL);
-        this.historyInit = currentURL;
       }
 
       if (this.history.length > 1) {
