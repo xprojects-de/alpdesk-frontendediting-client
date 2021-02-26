@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'Mrpm2NHdwSsv30T00LVPwDZTvFBvDLLBZp5OXF7QY_4';
+  @Input('rt') rt: string = 'sWoJ3cWOm6SdjytLRCVisv8yDanjyVogWv6fNll3xQs';
   @Input('frameurl') frameurl: string = '/preview.php';
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
