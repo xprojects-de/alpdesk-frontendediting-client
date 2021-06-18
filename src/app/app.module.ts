@@ -81,7 +81,7 @@ import { ItemFilemanagementComponent } from './items/item-filemanagement/item-fi
   //bootstrap: []
   // To develop locally enable this line!
   // To Deploy disable this line
-  bootstrap: [AppComponent]
+  //bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {
