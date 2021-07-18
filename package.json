@@ -26,29 +26,29 @@
     "@angular/router": "~12.1.2",
     "document-register-element": "^1.7.2",
     "ngx-build-plus": "^12.2.0",
-    "rxjs": "^6.6.7",
-    "tslib": "^2.2.0",
+    "rxjs": "^7.2.0",
+    "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.1.2",
     "@angular/cli": "~12.1.2",
     "@angular/compiler-cli": "~12.1.2",
-    "@types/jasmine": "~3.7.4",
-    "@types/node": "^15.3.0",
+    "@types/jasmine": "~3.8.1",
+    "@types/node": "^16.3.3",
     "codelyzer": "^6.0.2",
     "concat": "^1.0.3",
     "fs-extra": "^10.0.0",
-    "jasmine-core": "~3.7.1",
+    "jasmine-core": "~3.8.0",
     "jasmine-spec-reporter": "~7.0.0",
-    "karma": "~6.3.2",
+    "karma": "~6.3.4",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.1",
-    "karma-jasmine-html-reporter": "^1.6.0",
+    "karma-jasmine-html-reporter": "^1.7.0",
     "protractor": "~7.0.0",
-    "ts-node": "~9.1.1",
+    "ts-node": "~10.1.0",
     "tslint": "~6.1.0",
-    "typescript": "^4.2.4"
+    "typescript": "^4.3.5"
   }
 }
