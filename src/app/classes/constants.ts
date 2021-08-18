@@ -1,14 +1,14 @@
 export class Constants {
 
     public static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
-    
+
     public static TARGETTYPE_PAGE = 'page';
     public static TARGETTYPE_ARTICLE = 'article';
     public static TARGETTYPE_FILEMANAGEMENT = 'files';
     public static TARGETTYPE_CE = 'ce';
     public static TARGETTYPE_MOD = 'mod';
     public static TARGETTYPE_INFO = 'info';
-    
+
     public static ACTION_INIT = 'init';
     public static ACTION_PARENT_EDIT = 'parent_edit';
     public static ACTION_ELEMENT_EDIT = 'element_edit';
@@ -30,5 +30,5 @@ export class Constants {
 
     public static CLIPBOARDMODE_PASTETARGET_CE = '1';
     public static CLIPBOARDMODE_PASTETARGET_ARTICLE = '2';
-    
+
 }
