@@ -1,9 +1,8 @@
-
 export interface TlContentClipboard {
     childs: any;
     id: number;
     mode: string;
-    alpdeskptable?: string
+    alpdeskptable?: string;
 }
 
 export interface ContaoClipboardCommon {

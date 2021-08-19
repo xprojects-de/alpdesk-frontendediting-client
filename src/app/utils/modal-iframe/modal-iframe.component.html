@@ -1,14 +1,14 @@
 <div [style.height]="'100%'">
-  <div #alpdeskfeemodalspinner>
-    <mat-spinner [style.position]="'absolute'" [style.top]="'50%'" [style.left]="'50%'"
-      [style.transform]="'translate(-50%, -50%)'"></mat-spinner>
-  </div>
-  <button [style.float]="'right'" mat-button mat-dialog-close>
-    <mat-icon>close</mat-icon>
-  </button>
-  <button *ngIf="showBack === true" [style.float]="'right'" mat-button (click)="back()">
-    <mat-icon>keyboard_backspace</mat-icon>
-  </button>
-  <div [style.clear]="'both'" [style.marginBottom]="'5px'"></div>
-  <iframe #alpdeskfeemodalframe [src]="url" width="100%" height="90%" frameborder="0" (load)="iframeLoad()"></iframe>
+    <div #alpdeskfeemodalspinner>
+        <mat-spinner [style.position]="'absolute'" [style.top]="'50%'" [style.left]="'50%'"
+                     [style.transform]="'translate(-50%, -50%)'"></mat-spinner>
+    </div>
+    <button [style.float]="'right'" mat-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+    <button *ngIf="showBack === true" [style.float]="'right'" mat-button (click)="back()">
+        <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    <div [style.clear]="'both'" [style.marginBottom]="'5px'"></div>
+    <iframe #alpdeskfeemodalframe [src]="url" width="100%" height="90%" frameborder="0" (load)="iframeLoad()"></iframe>
 </div>

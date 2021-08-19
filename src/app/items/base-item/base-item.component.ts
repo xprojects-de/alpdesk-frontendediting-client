@@ -1,19 +1,20 @@
-import { Component } from '@angular/core';
-import { AlpdeskFeeServiceService } from 'src/app/services/alpdesk-fee-service.service';
+import {Component} from '@angular/core';
+import {AlpdeskFeeServiceService} from 'src/app/services/alpdesk-fee-service.service';
 
 @Component({
-  selector: 'app-base-item',
-  templateUrl: './base-item.component.html',
-  styleUrls: ['./base-item.component.scss']
+    selector: 'app-base-item',
+    templateUrl: './base-item.component.html',
+    styleUrls: ['./base-item.component.scss']
 })
 export class BaseItemComponent {
 
-  constructor() { }
+    constructor() {
+    }
 
-  dispatchEvent(params: any) {
-    document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
-      detail: params
-    }));
-  }
+    dispatchEvent(params: any): void {
+        document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+            detail: params
+        }));
+    }
 
 }

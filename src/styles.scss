@@ -1,7 +1,7 @@
+@use '~@angular/material' as mat;
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/theming";
-@include mat-core();
+@include mat.core();
 
 /* ======== Angular material custom themes ======== */
 
@@ -10,16 +10,16 @@ body {
         sans-serif;
 }
 
-$custom-typography: mat-typography-config(
+$custom-typography: mat.define-typography-config(
     $font-family:
         '-apple-system, system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;',
 );
-@include mat-core($custom-typography);
+@include mat.core($custom-typography);
 
-$alpdesktheme-primary: mat-palette($mat-deep-orange);
-$alpdesktheme-accent: mat-palette($mat-grey, 100, 500, A100);
-$alpdesktheme-warn: mat-palette($mat-red);
+$alpdesktheme-primary: mat.define-palette(mat.$deep-orange-palette);
+$alpdesktheme-accent: mat.define-palette(mat.$grey-palette, 100, 500, A100);
+$alpdesktheme-warn: mat.define-palette(mat.$red-palette);
 
-$alpdesktheme: mat-light-theme($alpdesktheme-primary, $alpdesktheme-accent, $alpdesktheme-warn);
+$alpdesktheme: mat.define-light-theme($alpdesktheme-primary, $alpdesktheme-accent, $alpdesktheme-warn);
 
-@include angular-material-theme($alpdesktheme);
+@include mat.all-component-themes($alpdesktheme);
