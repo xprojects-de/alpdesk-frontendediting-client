@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Just for Testing - Will be as Input from Component
     @Input('base') base: string = 'https://contao.local:8890/';
-    @Input('rt') rt: string = 'F4--r4Xe7OIxIRcMyM2mflLMT58DQ0gld0qgQyiYtXE';
+    @Input('rt') rt: string = 'MPYgoJgpKUFbkgc7dWr2mJUns0piUDAulRUE0wTobMU';
     @Input('frameurl') frameurl: string = '/preview.php';
 
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
@@ -370,10 +370,10 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         // Idea to recognize all clicked elements and show any Bubble with number of items (e.g. ContenSlider, SubColumns, etc)
         //compRef.instance.pushActiveElement(e);
 
-        let currentElement = event.target as HTMLElement;
+        const currentElement = event.target as HTMLElement;
         if (currentElement !== null && currentElement !== undefined) {
 
-            let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
+            const jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
             if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
 
                 const objElement = JSON.parse(jsonDataElement);
@@ -432,13 +432,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const data = frameContentWindow.document.querySelectorAll('*[data-alpdeskfee]');
                 data.forEach((e: HTMLElement) => {
+
                     const jsonData = e.getAttribute('data-alpdeskfee');
+
                     if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
+
                         const obj = JSON.parse(jsonData);
                         if (obj !== null && obj !== undefined) {
+
                             if (obj.type === Constants.TARGETTYPE_ARTICLE) {
+
                                 const parentNode = e.parentElement;
                                 if (parentNode !== null) {
+
                                     parentNode.style.minHeight = '50px';
                                     parentNode.classList.add('alpdeskfee-article-container');
                                     const parentClick$ = fromEvent<MouseEvent>(parentNode, 'click').subscribe((event: Event) => {
@@ -448,31 +454,85 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                         }
                                     });
                                     this.subscriptions.push(parentClick$);
+
                                 }
+
                             } else {
+
                                 e.classList.add('alpdeskfee-ce-container');
                                 const elementMouseover$ = fromEvent<MouseEvent>(e, 'mouseover').subscribe((event: Event) => {
                                     e.style.outline = '2px dashed rgb(244, 124, 0)';
                                     e.style.outlineOffset = '2px';
                                 });
                                 this.subscriptions.push(elementMouseover$);
+
                                 const elementMouseout$ = fromEvent<MouseEvent>(e, 'mouseout').subscribe((event: Event) => {
                                     e.style.outline = '0px dashed rgb(244, 124, 0)';
                                     e.style.outlineOffset = '0px';
                                 });
                                 this.subscriptions.push(elementMouseout$);
+
                                 const elementClick$ = fromEvent<MouseEvent>(e, 'click').subscribe((event: Event) => {
                                     this.prepareElement(e, frameContentWindow, event);
                                 });
                                 this.subscriptions.push(elementClick$);
+
                                 const elementContext$ = fromEvent<MouseEvent>(e, 'contextmenu').subscribe((event: Event) => {
                                     event.preventDefault();
                                     this.prepareElement(e, frameContentWindow, event);
                                 });
                                 this.subscriptions.push(elementContext$);
+
+                                const dragEnter$ = fromEvent<DragEvent>(e, 'dragenter').subscribe((event: DragEvent) => {
+                                    event.preventDefault();
+                                });
+                                this.subscriptions.push(dragEnter$);
+
+                                const dragLeave$ = fromEvent<DragEvent>(e, 'dragleave').subscribe((event: DragEvent) => {
+                                    event.preventDefault();
+                                    e.style.borderBottom = 'none';
+                                });
+                                this.subscriptions.push(dragLeave$);
+
+                                const dragOver$ = fromEvent<DragEvent>(e, 'dragover').subscribe((event: DragEvent) => {
+                                    event.preventDefault();
+                                    e.style.borderBottom = '2px dashed rgb(244, 124, 0)';
+                                });
+                                this.subscriptions.push(dragOver$);
+
+                                const drop$ = fromEvent<DragEvent>(e, 'drop').subscribe((event: DragEvent) => {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                    if (event !== null && event !== undefined) {
+                                        // @ts-ignore
+                                        const eventData = event.dataTransfer.getData('type');
+                                        console.log(eventData);
+                                        console.log(obj);
+                                        document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+                                            detail: {
+                                                preRequestPost: true,
+                                                rt: this.rt,
+                                                url: '/contao/alpdeskfee',
+                                                dialog: true,
+                                                action: Constants.ACTION_ELEMENT_NEW,
+                                                targetType: Constants.TARGETTYPE_CE,
+                                                do: obj.do,
+                                                id: obj.id,
+                                                pid: obj.pid,
+                                                pageEdit: obj.pageEdit,
+                                                pageId: obj.pageId
+                                            }
+                                        }));
+                                    }
+                                });
+                                this.subscriptions.push(drop$);
+
                             }
+
                         }
+
                     }
+
                 });
             }
         }
