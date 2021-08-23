@@ -11,7 +11,7 @@ import {
     ViewChild,
     ViewContainerRef
 } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {DialogPosition, MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DomSanitizer} from '@angular/platform-browser';
 import {fromEvent, Subscription} from 'rxjs';
@@ -21,6 +21,7 @@ import {ContaoClipboardCommon} from './interfaces/contao-clipboard';
 import {ItemContainerComponent} from './item-container/item-container.component';
 import {AlpdeskFeeServiceService} from './services/alpdesk-fee-service.service';
 import {DialogData, ModalIframeComponent} from './utils/modal-iframe/modal-iframe.component';
+import {DraggableElementsComponent} from './draggable-elements/draggable-elements.component';
 
 @Component({
     selector: 'app-root',
@@ -29,11 +30,48 @@ import {DialogData, ModalIframeComponent} from './utils/modal-iframe/modal-ifram
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    // Just for Testing - Will be as Input from Component
-    @Input('base') base: string = 'https://contao.local:8890/';
-    @Input('rt') rt: string = 'F4--r4Xe7OIxIRcMyM2mflLMT58DQ0gld0qgQyiYtXE';
-    @Input('frameurl') frameurl: string = '/preview.php';
+    // tslint:disable-next-line:max-line-length variable-name
+    constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
+    }
 
+    // Just for Testing - Will be as Input from Component
+    // tslint:disable-next-line:no-input-rename
+    @Input('base') base = 'https://contao.local:8890/';
+    // tslint:disable-next-line:no-input-rename
+    @Input('rt') rt = '8M62S3MloL-OpXm_bngrf7e-gqrchmjTSW9qhlcvbs8';
+    // tslint:disable-next-line:no-input-rename
+    @Input('frameurl') frameurl = '/preview.php';
+    // tslint:disable-next-line:no-input-rename
+    @Input('elements') elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
+
+    @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
+    @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
+    @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
+
+    private compRef!: ComponentRef<ItemContainerComponent>;
+
+    title = 'alpdeskfee-client';
+    url: any;
+
+    framecontainerInitHeight = 500;
+    framecontainerInitHeightString = '500px';
+    framecontainerDimension = '-';
+    deviceselect = 'desktop';
+    // tslint:disable-next-line:variable-name
+    phone_1 = 375;
+    // tslint:disable-next-line:variable-name
+    phone_2 = 667;
+    // tslint:disable-next-line:variable-name
+    tablet_1 = 760;
+    // tslint:disable-next-line:variable-name
+    tablet_2 = 1024;
+
+    frameUrlContent = '/preview.php';
+
+    private subscriptions: Subscription[] = [];
+    private elementsDialogOpened = false;
+
+    // tslint:disable-next-line:typedef
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
 
         // console.log(event.detail);
@@ -47,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 (data) => {
 
                     // console.log(data);
-                    if (data.status != 200) {
+                    if (data.status !== 200) {
                         this.showSnackBar('An error has occurred');
                     }
 
@@ -109,32 +147,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (event.detail.framelocation !== null && event.detail.framelocation !== undefined && event.detail.framelocation !== '') {
             this.iframeLocation(event.detail.framelocation);
         }
-    }
-
-    @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
-    @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
-    @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
-
-    private compRef!: ComponentRef<ItemContainerComponent>;
-
-    title = 'alpdeskfee-client';
-    url: any;
-
-    framecontainerInitHeight = 500;
-    framecontainerInitHeightString = '500px';
-    framecontainerDimension = '-';
-    deviceselect = 'desktop';
-    phone_1 = 375;
-    phone_2 = 667;
-    tablet_1 = 760;
-    tablet_2 = 1024;
-
-    frameUrlContent = '/preview.php';
-
-    private subscriptions: Subscription[] = [];
-
-    // tslint:disable-next-line:max-line-length variable-name
-    constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
     }
 
     private updateFromContaoClipboard(): void {
@@ -304,7 +316,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const ug: UrlGenerator = new UrlGenerator();
 
         const url = ug.generateUrl(params, this.base, this.rt);
-        const dialogData: DialogData = {url: url};
+
+        let reloadAfterInit = false;
+        if (params.reloadAfterInit !== null && params.reloadAfterInit !== undefined && params.reloadAfterInit) {
+            reloadAfterInit = true;
+        }
+
+        const dialogData: DialogData = {url, reloadAfterInit};
 
         const dialogRef = this.dialog.open(ModalIframeComponent, {
             width: '80vw',
@@ -315,6 +333,33 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         dialogRef.afterClosed().subscribe(result => {
             this.reloadIframe();
         });
+    }
+
+    openDialogElements(): void {
+
+        if (this.elementsDialogOpened === false) {
+
+            const dialogPosition: DialogPosition = {
+                top: '0px',
+                left: '0px'
+            };
+
+            const dialogRef = this.dialog.open(DraggableElementsComponent, {
+                width: '250px',
+                height: '100vh',
+                hasBackdrop: false,
+                position: dialogPosition,
+                panelClass: 'elementsDialog',
+                data: this.elements
+            });
+
+            this.elementsDialogOpened = true;
+
+            dialogRef.afterClosed().subscribe(result => {
+                this.elementsDialogOpened = false;
+            });
+
+        }
     }
 
     reloadIframe(): void {
@@ -360,7 +405,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private prepareElement(e: HTMLElement, frameContentWindow: any, event: Event): void {
 
-        let cData = frameContentWindow.document.querySelectorAll('*[data-alpdeskfee]');
+        const cData = frameContentWindow.document.querySelectorAll('*[data-alpdeskfee]');
         cData.forEach((eC: HTMLElement) => {
             if (eC !== e) {
                 eC.style.border = 'none';
@@ -368,12 +413,12 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         // Idea to recognize all clicked elements and show any Bubble with number of items (e.g. ContenSlider, SubColumns, etc)
-        //compRef.instance.pushActiveElement(e);
+        // compRef.instance.pushActiveElement(e);
 
-        let currentElement = event.target as HTMLElement;
+        const currentElement = event.target as HTMLElement;
         if (currentElement !== null && currentElement !== undefined) {
 
-            let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
+            const jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
             if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
 
                 const objElement = JSON.parse(jsonDataElement);
@@ -389,7 +434,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
                 if (closestElement !== null && closestElement !== undefined) {
-                    let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
+                    // tslint:disable-next-line:no-shadowed-variable
+                    const jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
                     if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
                         const objElement = JSON.parse(jsonDataElement);
                         if (objElement !== null && objElement !== undefined) {
@@ -432,13 +478,19 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const data = frameContentWindow.document.querySelectorAll('*[data-alpdeskfee]');
                 data.forEach((e: HTMLElement) => {
+
                     const jsonData = e.getAttribute('data-alpdeskfee');
+
                     if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
+
                         const obj = JSON.parse(jsonData);
                         if (obj !== null && obj !== undefined) {
+
                             if (obj.type === Constants.TARGETTYPE_ARTICLE) {
+
                                 const parentNode = e.parentElement;
                                 if (parentNode !== null) {
+
                                     parentNode.style.minHeight = '50px';
                                     parentNode.classList.add('alpdeskfee-article-container');
                                     const parentClick$ = fromEvent<MouseEvent>(parentNode, 'click').subscribe((event: Event) => {
@@ -448,31 +500,93 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                         }
                                     });
                                     this.subscriptions.push(parentClick$);
+
                                 }
+
                             } else {
+
                                 e.classList.add('alpdeskfee-ce-container');
                                 const elementMouseover$ = fromEvent<MouseEvent>(e, 'mouseover').subscribe((event: Event) => {
                                     e.style.outline = '2px dashed rgb(244, 124, 0)';
                                     e.style.outlineOffset = '2px';
                                 });
                                 this.subscriptions.push(elementMouseover$);
+
                                 const elementMouseout$ = fromEvent<MouseEvent>(e, 'mouseout').subscribe((event: Event) => {
                                     e.style.outline = '0px dashed rgb(244, 124, 0)';
                                     e.style.outlineOffset = '0px';
                                 });
                                 this.subscriptions.push(elementMouseout$);
+
                                 const elementClick$ = fromEvent<MouseEvent>(e, 'click').subscribe((event: Event) => {
                                     this.prepareElement(e, frameContentWindow, event);
                                 });
                                 this.subscriptions.push(elementClick$);
+
                                 const elementContext$ = fromEvent<MouseEvent>(e, 'contextmenu').subscribe((event: Event) => {
                                     event.preventDefault();
                                     this.prepareElement(e, frameContentWindow, event);
                                 });
                                 this.subscriptions.push(elementContext$);
+
+                                if (obj.type === Constants.TARGETTYPE_CE) {
+
+                                    const dragEnter$ = fromEvent<DragEvent>(e, 'dragenter').subscribe((event: DragEvent) => {
+                                        event.preventDefault();
+                                    });
+                                    this.subscriptions.push(dragEnter$);
+
+                                    const dragLeave$ = fromEvent<DragEvent>(e, 'dragleave').subscribe((event: DragEvent) => {
+                                        event.preventDefault();
+                                        e.style.borderBottom = 'none';
+                                    });
+                                    this.subscriptions.push(dragLeave$);
+
+                                    const dragOver$ = fromEvent<DragEvent>(e, 'dragover').subscribe((event: DragEvent) => {
+                                        event.preventDefault();
+                                        e.style.borderBottom = '5px solid rgb(244, 124, 0)';
+                                    });
+                                    this.subscriptions.push(dragOver$);
+
+                                    const drop$ = fromEvent<DragEvent>(e, 'drop').subscribe((event: DragEvent) => {
+
+                                        event.preventDefault();
+                                        event.stopPropagation();
+
+                                        // tslint:disable-next-line:max-line-length
+                                        if (event !== null && event !== undefined && event.dataTransfer !== null && event.dataTransfer !== undefined) {
+
+                                            const eventData = event.dataTransfer.getData('type');
+                                            document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+                                                detail: {
+                                                    preRequestPost: true,
+                                                    rt: this.rt,
+                                                    url: '/contao/alpdeskfee',
+                                                    dialog: true,
+                                                    action: Constants.ACTION_ELEMENT_NEW,
+                                                    targetType: Constants.TARGETTYPE_CE,
+                                                    do: obj.do,
+                                                    id: obj.id,
+                                                    pid: obj.pid,
+                                                    pageEdit: obj.pageEdit,
+                                                    pageId: obj.pageId,
+                                                    element_type: eventData,
+                                                    reloadAfterInit: true
+                                                }
+                                            }));
+                                        }
+                                    });
+
+                                    this.subscriptions.push(drop$);
+
+                                }
+
                             }
+
                         }
+
                     }
+
                 });
             }
         }

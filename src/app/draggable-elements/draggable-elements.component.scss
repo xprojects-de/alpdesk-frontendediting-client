@@ -1,0 +1,34 @@
+.draggableElementsContainer {
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.draggableElementsGroup {
+  margin-bottom: 5px;
+}
+
+.draggableElementsGroup_inside {
+  padding: 10px;
+}
+
+.draggableElementsGroup h3 {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.draggableClear {
+  clear: both;
+}
+
+.draggableElementsItem {
+  width: auto;
+  float: left;
+  padding: 5px 10px 5px 10px;
+  border: solid 1px #ccc;
+  text-align: center;
+  background: #fff;
+  margin-right: 10px;
+  cursor: move;
+  margin-bottom: 10px;
+}
