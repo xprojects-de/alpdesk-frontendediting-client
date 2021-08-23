@@ -529,53 +529,57 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                 });
                                 this.subscriptions.push(elementContext$);
 
-                                const dragEnter$ = fromEvent<DragEvent>(e, 'dragenter').subscribe((event: DragEvent) => {
-                                    event.preventDefault();
-                                });
-                                this.subscriptions.push(dragEnter$);
+                                if (obj.type === Constants.TARGETTYPE_CE) {
 
-                                const dragLeave$ = fromEvent<DragEvent>(e, 'dragleave').subscribe((event: DragEvent) => {
-                                    event.preventDefault();
-                                    e.style.borderBottom = 'none';
-                                });
-                                this.subscriptions.push(dragLeave$);
+                                    const dragEnter$ = fromEvent<DragEvent>(e, 'dragenter').subscribe((event: DragEvent) => {
+                                        event.preventDefault();
+                                    });
+                                    this.subscriptions.push(dragEnter$);
 
-                                const dragOver$ = fromEvent<DragEvent>(e, 'dragover').subscribe((event: DragEvent) => {
-                                    event.preventDefault();
-                                    e.style.borderBottom = '5px solid rgb(244, 124, 0)';
-                                });
-                                this.subscriptions.push(dragOver$);
+                                    const dragLeave$ = fromEvent<DragEvent>(e, 'dragleave').subscribe((event: DragEvent) => {
+                                        event.preventDefault();
+                                        e.style.borderBottom = 'none';
+                                    });
+                                    this.subscriptions.push(dragLeave$);
 
-                                const drop$ = fromEvent<DragEvent>(e, 'drop').subscribe((event: DragEvent) => {
+                                    const dragOver$ = fromEvent<DragEvent>(e, 'dragover').subscribe((event: DragEvent) => {
+                                        event.preventDefault();
+                                        e.style.borderBottom = '5px solid rgb(244, 124, 0)';
+                                    });
+                                    this.subscriptions.push(dragOver$);
 
-                                    event.preventDefault();
-                                    event.stopPropagation();
+                                    const drop$ = fromEvent<DragEvent>(e, 'drop').subscribe((event: DragEvent) => {
 
-                                    // tslint:disable-next-line:max-line-length
-                                    if (event !== null && event !== undefined && event.dataTransfer !== null && event.dataTransfer !== undefined) {
+                                        event.preventDefault();
+                                        event.stopPropagation();
 
-                                        const eventData = event.dataTransfer.getData('type');
-                                        document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
-                                            detail: {
-                                                preRequestPost: true,
-                                                rt: this.rt,
-                                                url: '/contao/alpdeskfee',
-                                                dialog: true,
-                                                action: Constants.ACTION_ELEMENT_NEW,
-                                                targetType: Constants.TARGETTYPE_CE,
-                                                do: obj.do,
-                                                id: obj.id,
-                                                pid: obj.pid,
-                                                pageEdit: obj.pageEdit,
-                                                pageId: obj.pageId,
-                                                element_type: eventData,
-                                                reloadAfterInit: true
-                                            }
-                                        }));
-                                    }
-                                });
+                                        // tslint:disable-next-line:max-line-length
+                                        if (event !== null && event !== undefined && event.dataTransfer !== null && event.dataTransfer !== undefined) {
 
-                                this.subscriptions.push(drop$);
+                                            const eventData = event.dataTransfer.getData('type');
+                                            document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+                                                detail: {
+                                                    preRequestPost: true,
+                                                    rt: this.rt,
+                                                    url: '/contao/alpdeskfee',
+                                                    dialog: true,
+                                                    action: Constants.ACTION_ELEMENT_NEW,
+                                                    targetType: Constants.TARGETTYPE_CE,
+                                                    do: obj.do,
+                                                    id: obj.id,
+                                                    pid: obj.pid,
+                                                    pageEdit: obj.pageEdit,
+                                                    pageId: obj.pageId,
+                                                    element_type: eventData,
+                                                    reloadAfterInit: true
+                                                }
+                                            }));
+                                        }
+                                    });
+
+                                    this.subscriptions.push(drop$);
+
+                                }
 
                             }
 
