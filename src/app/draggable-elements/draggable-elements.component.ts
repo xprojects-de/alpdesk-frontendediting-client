@@ -1,49 +1,66 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {fromEvent, Subscription} from 'rxjs';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+
+export interface DraggableElements {
+    key: string;
+    label: string;
+}
+
+export interface DraggableElementsGroup {
+    label: string;
+    items: DraggableElements[];
+}
 
 @Component({
     selector: 'app-draggable-elements',
     templateUrl: './draggable-elements.component.html',
     styleUrls: ['./draggable-elements.component.scss']
 })
-export class DraggableElementsComponent implements AfterViewInit, OnDestroy {
+export class DraggableElementsComponent implements OnInit {
 
-    @ViewChild('draggableElement') draggableElement!: ElementRef;
-    private subscriptions: Subscription[] = [];
+    draggableElements: DraggableElementsGroup[] = [];
 
-    constructor() {
+    constructor(public dialogRef: MatDialogRef<DraggableElementsComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: string) {
     }
 
-    ngAfterViewInit(): void {
-        this.draggable();
-    }
+    ngOnInit(): void {
 
-    ngOnDestroy(): void {
+        if (this.dataRef !== null && this.dataRef !== undefined && this.dataRef !== '') {
 
-        this.subscriptions.forEach((s) => {
-            if (s !== null && s !== undefined) {
-                s.unsubscribe();
+            const validElements = JSON.parse(this.dataRef);
+            if (validElements !== null && validElements !== undefined) {
+
+                const tmpDraggableElements: DraggableElementsGroup[] = [];
+
+                Object.keys(validElements).forEach(key => {
+
+                    const tmpGroup: DraggableElementsGroup = {
+                        label: key as string,
+                        items: validElements[key] as DraggableElements[]
+                    };
+                    tmpDraggableElements.push(tmpGroup);
+
+                });
+
+                this.draggableElements = tmpDraggableElements;
+
             }
-        });
+
+        }
 
     }
 
-    draggable(): void {
+    dragStart(event: DragEvent, value: string): void {
 
-        if (this.draggableElement.nativeElement !== null && this.draggableElement.nativeElement !== undefined) {
+        if (event !== null && event !== undefined) {
+            if (event.dataTransfer !== null && event.dataTransfer !== undefined) {
 
-            this.draggableElement.nativeElement.draggable = true;
+                event.dataTransfer.setData('type', value);
+                this.dialogRef.close();
 
-            const dragStart$ = fromEvent<DragEvent>(this.draggableElement.nativeElement, 'dragstart').subscribe((event: DragEvent) => {
-                if (event !== null && event !== undefined) {
-                    console.log('Drag Start');
-                    // @ts-ignore
-                    event.dataTransfer.setData('type', 'text');
-                }
-            });
-
-            this.subscriptions.push.apply(this.subscriptions, [dragStart$]);
+            }
         }
+
     }
 
 }

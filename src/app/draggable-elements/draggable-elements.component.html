@@ -1,12 +1,28 @@
-<div #draggableElement class="example-box">
-    I can only be dragged using the handle
 
-    <div class="example-handle">
-        <svg width="24px" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"></path>
-            <path d="M0 0h24v24H0z" fill="none"></path>
-        </svg>
+<button [style.float]="'right'" mat-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+</button>
+
+<div class="draggableElementsContainer">
+
+    <div *ngFor="let groupItem of draggableElements" class="draggableElementsGroup">
+        <div class="draggableElementsGroup_inside">
+
+            <h3>{{groupItem.label}}</h3>
+
+            <div *ngFor="let item of groupItem.items" draggable="true" (dragstart)="dragStart($event, item.key)"
+                 class="draggableElementsItem">
+                {{ item.label }}
+            </div>
+
+            <div class="draggableClear"></div>
+
+        </div>
+
     </div>
+
+    <div class="draggableClear"></div>
+
 </div>
 
 

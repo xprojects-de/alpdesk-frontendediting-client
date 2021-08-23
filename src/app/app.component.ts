@@ -11,7 +11,7 @@ import {
     ViewChild,
     ViewContainerRef
 } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {DialogPosition, MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {DomSanitizer} from '@angular/platform-browser';
 import {fromEvent, Subscription} from 'rxjs';
@@ -21,6 +21,7 @@ import {ContaoClipboardCommon} from './interfaces/contao-clipboard';
 import {ItemContainerComponent} from './item-container/item-container.component';
 import {AlpdeskFeeServiceService} from './services/alpdesk-fee-service.service';
 import {DialogData, ModalIframeComponent} from './utils/modal-iframe/modal-iframe.component';
+import {DraggableElementsComponent} from './draggable-elements/draggable-elements.component';
 
 @Component({
     selector: 'app-root',
@@ -29,10 +30,37 @@ import {DialogData, ModalIframeComponent} from './utils/modal-iframe/modal-ifram
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
+    // tslint:disable-next-line:max-line-length variable-name
+    constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
+    }
+
     // Just for Testing - Will be as Input from Component
-    @Input('base') base: string = 'https://contao.local:8890/';
-    @Input('rt') rt: string = 'MPYgoJgpKUFbkgc7dWr2mJUns0piUDAulRUE0wTobMU';
-    @Input('frameurl') frameurl: string = '/preview.php';
+    @Input('base') base = 'https://contao.local:8890/';
+    @Input('rt') rt = '8M62S3MloL-OpXm_bngrf7e-gqrchmjTSW9qhlcvbs8';
+    @Input('frameurl') frameurl = '/preview.php';
+    @Input('elements') elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
+
+    @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
+    @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
+    @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
+
+    private compRef!: ComponentRef<ItemContainerComponent>;
+
+    title = 'alpdeskfee-client';
+    url: any;
+
+    framecontainerInitHeight = 500;
+    framecontainerInitHeightString = '500px';
+    framecontainerDimension = '-';
+    deviceselect = 'desktop';
+    phone_1 = 375;
+    phone_2 = 667;
+    tablet_1 = 760;
+    tablet_2 = 1024;
+
+    frameUrlContent = '/preview.php';
+
+    private subscriptions: Subscription[] = [];
 
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
 
@@ -109,32 +137,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (event.detail.framelocation !== null && event.detail.framelocation !== undefined && event.detail.framelocation !== '') {
             this.iframeLocation(event.detail.framelocation);
         }
-    }
-
-    @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
-    @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
-    @ViewChild('alpdeskfeeframespinner') alpdeskfeeframespinner!: ElementRef;
-
-    private compRef!: ComponentRef<ItemContainerComponent>;
-
-    title = 'alpdeskfee-client';
-    url: any;
-
-    framecontainerInitHeight = 500;
-    framecontainerInitHeightString = '500px';
-    framecontainerDimension = '-';
-    deviceselect = 'desktop';
-    phone_1 = 375;
-    phone_2 = 667;
-    tablet_1 = 760;
-    tablet_2 = 1024;
-
-    frameUrlContent = '/preview.php';
-
-    private subscriptions: Subscription[] = [];
-
-    // tslint:disable-next-line:max-line-length variable-name
-    constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
     }
 
     private updateFromContaoClipboard(): void {
@@ -304,7 +306,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const ug: UrlGenerator = new UrlGenerator();
 
         const url = ug.generateUrl(params, this.base, this.rt);
-        const dialogData: DialogData = {url: url};
+
+        let reloadAfterInit = false;
+        if (params.reloadAfterInit !== null && params.reloadAfterInit !== undefined && params.reloadAfterInit) {
+            reloadAfterInit = true;
+        }
+
+        const dialogData: DialogData = {url, reloadAfterInit};
 
         const dialogRef = this.dialog.open(ModalIframeComponent, {
             width: '80vw',
@@ -314,6 +322,27 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         dialogRef.afterClosed().subscribe(result => {
             this.reloadIframe();
+        });
+    }
+
+    openDialogElements(): void {
+
+        const dialogPosition: DialogPosition = {
+            top: '0px',
+            left: '0px'
+        };
+
+        const dialogRef = this.dialog.open(DraggableElementsComponent, {
+            width: '250px',
+            height: '100vh',
+            hasBackdrop: false,
+            position: dialogPosition,
+            panelClass: 'elementsDialog',
+            data: this.elements
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+
         });
     }
 
@@ -360,7 +389,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private prepareElement(e: HTMLElement, frameContentWindow: any, event: Event): void {
 
-        let cData = frameContentWindow.document.querySelectorAll('*[data-alpdeskfee]');
+        const cData = frameContentWindow.document.querySelectorAll('*[data-alpdeskfee]');
         cData.forEach((eC: HTMLElement) => {
             if (eC !== e) {
                 eC.style.border = 'none';
@@ -368,7 +397,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         // Idea to recognize all clicked elements and show any Bubble with number of items (e.g. ContenSlider, SubColumns, etc)
-        //compRef.instance.pushActiveElement(e);
+        // compRef.instance.pushActiveElement(e);
 
         const currentElement = event.target as HTMLElement;
         if (currentElement !== null && currentElement !== undefined) {
@@ -389,7 +418,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
                 if (closestElement !== null && closestElement !== undefined) {
-                    let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
+                    const jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
                     if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
                         const objElement = JSON.parse(jsonDataElement);
                         if (objElement !== null && objElement !== undefined) {
@@ -496,7 +525,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                                 const dragOver$ = fromEvent<DragEvent>(e, 'dragover').subscribe((event: DragEvent) => {
                                     event.preventDefault();
-                                    e.style.borderBottom = '2px dashed rgb(244, 124, 0)';
+                                    e.style.borderBottom = '5px solid rgb(244, 124, 0)';
                                 });
                                 this.subscriptions.push(dragOver$);
 
@@ -520,7 +549,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                                 id: obj.id,
                                                 pid: obj.pid,
                                                 pageEdit: obj.pageEdit,
-                                                pageId: obj.pageId
+                                                pageId: obj.pageId,
+                                                element_type: eventData,
+                                                reloadAfterInit: true
                                             }
                                         }));
                                     }

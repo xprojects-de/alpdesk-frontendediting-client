@@ -1,4 +1,3 @@
-<app-draggable-elements></app-draggable-elements>
 <div>
     <mat-form-field>
         <mat-select [(value)]="deviceselect">
@@ -20,6 +19,10 @@
     </mat-form-field>
     <button mat-button (click)="reloadIframeWithCondition()">
         <mat-icon>refresh</mat-icon>
+    </button>
+    &nbsp;|&nbsp;
+    <button mat-button (click)="openDialogElements()">
+        <mat-icon>add</mat-icon>
     </button>
 </div>
 <div #alpdeskfeeframecontainer [style.resize]="'both'" [style.overflow]="'auto'" [style.maxWid]="'100%'"
