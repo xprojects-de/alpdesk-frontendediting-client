@@ -10,6 +10,10 @@ body {
         sans-serif;
 }
 
+.elementsDialog .mat-dialog-container  {
+    padding: 0px;
+}
+
 $custom-typography: mat.define-typography-config(
     $font-family:
         '-apple-system, system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;',

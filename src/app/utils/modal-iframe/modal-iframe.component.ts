@@ -1,10 +1,11 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DomSanitizer} from '@angular/platform-browser';
 import {fromEvent, Subscription} from 'rxjs';
 
 export interface DialogData {
     url: string;
+    reloadAfterInit: boolean;
 }
 
 @Component({
@@ -12,7 +13,7 @@ export interface DialogData {
     templateUrl: './modal-iframe.component.html',
     styleUrls: ['./modal-iframe.component.scss']
 })
-export class ModalIframeComponent implements OnInit, OnDestroy {
+export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @ViewChild('alpdeskfeemodalspinner') alpdeskfeemodalspinner!: ElementRef;
     @ViewChild('alpdeskfeemodalframe') alpdeskfeemodalframe!: ElementRef;
@@ -33,6 +34,14 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);
+    }
+
+    ngAfterViewInit(): void {
+
+        if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== undefined) {
+            this.alpdeskfeemodalframe.nativeElement.style.opacity = '0';
+        }
+
     }
 
     ngOnDestroy(): void {
@@ -56,16 +65,26 @@ export class ModalIframeComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line:max-line-length
         if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
 
+            const currentURL: string = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
+            if (this.dataRef.reloadAfterInit) {
+
+                this.alpdeskfeemodalframe.nativeElement.contentWindow.location.reload();
+                this.dataRef.reloadAfterInit = false;
+
+                return;
+
+            }
+
+            this.alpdeskfeemodalframe.nativeElement.style.opacity = '1';
             this.alpdeskfeemodalspinner.nativeElement.style.display = 'none';
 
-            const currentURL: string = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
             const historyInvalidUrl: boolean = (currentURL.indexOf('mode=copy') > 0 || currentURL.indexOf('mode=cut') > 0);
 
             if (this.historyInit === currentURL) {
                 this.history = [];
             }
 
-            if (historyInvalidUrl === false) {
+            if (!historyInvalidUrl) {
                 if (this.history.length > 0) {
                     if (this.history[this.history.length - 1] !== currentURL) {
                         this.history.push(currentURL);

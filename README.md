@@ -2,6 +2,7 @@
 
 ## Development
 ng build --outputPath=/Users/benjaminhummel/Documents/MAMPP/contao.local/web/alpdeskfee-client --base-href /alpdeskfee-client/ --watch
+https://contao.local:8890/alpdeskfee-client/client.html
 
 ## Test using external index.html
 npm install http-server -g
