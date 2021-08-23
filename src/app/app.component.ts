@@ -35,9 +35,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // Just for Testing - Will be as Input from Component
+    // tslint:disable-next-line:no-input-rename
     @Input('base') base = 'https://contao.local:8890/';
+    // tslint:disable-next-line:no-input-rename
     @Input('rt') rt = '8M62S3MloL-OpXm_bngrf7e-gqrchmjTSW9qhlcvbs8';
+    // tslint:disable-next-line:no-input-rename
     @Input('frameurl') frameurl = '/preview.php';
+    // tslint:disable-next-line:no-input-rename
     @Input('elements') elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
 
     @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
@@ -53,15 +57,21 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     framecontainerInitHeightString = '500px';
     framecontainerDimension = '-';
     deviceselect = 'desktop';
+    // tslint:disable-next-line:variable-name
     phone_1 = 375;
+    // tslint:disable-next-line:variable-name
     phone_2 = 667;
+    // tslint:disable-next-line:variable-name
     tablet_1 = 760;
+    // tslint:disable-next-line:variable-name
     tablet_2 = 1024;
 
     frameUrlContent = '/preview.php';
 
     private subscriptions: Subscription[] = [];
+    private elementsDialogOpened = false;
 
+    // tslint:disable-next-line:typedef
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
 
         // console.log(event.detail);
@@ -75,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 (data) => {
 
                     // console.log(data);
-                    if (data.status != 200) {
+                    if (data.status !== 200) {
                         this.showSnackBar('An error has occurred');
                     }
 
@@ -327,23 +337,29 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     openDialogElements(): void {
 
-        const dialogPosition: DialogPosition = {
-            top: '0px',
-            left: '0px'
-        };
+        if (this.elementsDialogOpened === false) {
 
-        const dialogRef = this.dialog.open(DraggableElementsComponent, {
-            width: '250px',
-            height: '100vh',
-            hasBackdrop: false,
-            position: dialogPosition,
-            panelClass: 'elementsDialog',
-            data: this.elements
-        });
+            const dialogPosition: DialogPosition = {
+                top: '0px',
+                left: '0px'
+            };
 
-        dialogRef.afterClosed().subscribe(result => {
+            const dialogRef = this.dialog.open(DraggableElementsComponent, {
+                width: '250px',
+                height: '100vh',
+                hasBackdrop: false,
+                position: dialogPosition,
+                panelClass: 'elementsDialog',
+                data: this.elements
+            });
 
-        });
+            this.elementsDialogOpened = true;
+
+            dialogRef.afterClosed().subscribe(result => {
+                this.elementsDialogOpened = false;
+            });
+
+        }
     }
 
     reloadIframe(): void {
@@ -418,6 +434,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
                 if (closestElement !== null && closestElement !== undefined) {
+                    // tslint:disable-next-line:no-shadowed-variable
                     const jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
                     if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
                         const objElement = JSON.parse(jsonDataElement);
@@ -530,13 +547,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                 this.subscriptions.push(dragOver$);
 
                                 const drop$ = fromEvent<DragEvent>(e, 'drop').subscribe((event: DragEvent) => {
+
                                     event.preventDefault();
                                     event.stopPropagation();
-                                    if (event !== null && event !== undefined) {
-                                        // @ts-ignore
+
+                                    // tslint:disable-next-line:max-line-length
+                                    if (event !== null && event !== undefined && event.dataTransfer !== null && event.dataTransfer !== undefined) {
+
                                         const eventData = event.dataTransfer.getData('type');
-                                        console.log(eventData);
-                                        console.log(obj);
                                         document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
                                             detail: {
                                                 preRequestPost: true,
@@ -556,6 +574,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                         }));
                                     }
                                 });
+
                                 this.subscriptions.push(drop$);
 
                             }
