@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     // tslint:disable-next-line:no-input-rename
     @Input('base') base = 'https://contao.local:8890/';
     // tslint:disable-next-line:no-input-rename
-    @Input('rt') rt = '8M62S3MloL-OpXm_bngrf7e-gqrchmjTSW9qhlcvbs8';
+    @Input('rt') rt = 'P-04hv8i5HPaJL0uk4e2Kw7P8eMGHWTLaVr9Ka1i390';
     // tslint:disable-next-line:no-input-rename
     @Input('frameurl') frameurl = '/preview.php';
     // tslint:disable-next-line:no-input-rename
