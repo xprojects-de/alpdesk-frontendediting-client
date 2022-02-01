@@ -63,7 +63,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
     iframeLoad(): void {
 
         // tslint:disable-next-line:max-line-length
-        if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
+        if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== undefined && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
 
             const currentURL: string = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
             if (this.dataRef.reloadAfterInit) {
@@ -140,7 +140,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
     back(): void {
 
         // tslint:disable-next-line:max-line-length
-        if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
+        if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== undefined && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
             if (this.history.length > 0) {
                 this.alpdeskfeemodalspinner.nativeElement.style.display = 'block';
                 this.history.pop();

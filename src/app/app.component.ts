@@ -35,13 +35,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // Just for Testing - Will be as Input from Component
-    // tslint:disable-next-line:no-input-rename
-    @Input('base') base = 'https://contao.local:8890/';
-    // tslint:disable-next-line:no-input-rename
-    @Input('rt') rt = 'P-04hv8i5HPaJL0uk4e2Kw7P8eMGHWTLaVr9Ka1i390';
-    // tslint:disable-next-line:no-input-rename
+    @Input('base') base = 'https://contao.local-latest:8890/';
+    @Input('rt') rt = '3880413135513c4.bqavj5GeyEEIc2L7BvVPm3bpunvMLKYuNfbkn6nxHXY.Wc7N6drEngJtIQfWbI0h0RmBzyiPVcpEcqGz9Ji2bCAv7-C_ptepKFwQAQ';
     @Input('frameurl') frameurl = '/preview.php';
-    // tslint:disable-next-line:no-input-rename
     @Input('elements') elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
 
     @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
@@ -57,13 +53,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     framecontainerInitHeightString = '500px';
     framecontainerDimension = '-';
     deviceselect = 'desktop';
-    // tslint:disable-next-line:variable-name
     phone_1 = 375;
-    // tslint:disable-next-line:variable-name
     phone_2 = 667;
-    // tslint:disable-next-line:variable-name
     tablet_1 = 760;
-    // tslint:disable-next-line:variable-name
     tablet_2 = 1024;
 
     frameUrlContent = '/preview.php';
@@ -71,7 +63,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private subscriptions: Subscription[] = [];
     private elementsDialogOpened = false;
 
-    // tslint:disable-next-line:typedef
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
 
         // console.log(event.detail);

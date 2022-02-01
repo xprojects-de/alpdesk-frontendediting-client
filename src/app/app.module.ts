@@ -35,7 +35,7 @@ import {ItemDragComponent} from './items/item-drag/item-drag.component';
 import {ItemPasteAfterComponent} from './items/item-paste-after/item-paste-after.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ItemFilemanagementComponent} from './items/item-filemanagement/item-filemanagement.component';
-import { DraggableElementsComponent } from './draggable-elements/draggable-elements.component';
+import {DraggableElementsComponent} from './draggable-elements/draggable-elements.component';
 
 @NgModule({
     declarations: [
@@ -86,8 +86,8 @@ import { DraggableElementsComponent } from './draggable-elements/draggable-eleme
     // bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(private injector: Injector) {
 
+    constructor(private injector: Injector) {
     }
 
     ngDoBootstrap(): void {

@@ -14,7 +14,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
     @Output() directiveChangePosition = new EventEmitter<ElementPosition>();
 
-    private element: HTMLElement;
+    private readonly element: HTMLElement;
     private sticky = false;
 
     private subscriptions: Subscription[] = [];
@@ -89,7 +89,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
     stickyItemBar(): void {
 
         const frameScrollEvent$ = fromEvent<MouseEvent>(this.frameContentDocument, 'scroll');
-        this.frameScrollSubscription = frameScrollEvent$.subscribe((event: MouseEvent) => {
+        this.frameScrollSubscription = frameScrollEvent$.subscribe(() => {
 
             if (this.frameContentDocument !== undefined && this.frameContentDocument !== null) {
                 let scrollValue = 0;
