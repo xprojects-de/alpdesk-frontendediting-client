@@ -118,9 +118,21 @@
               "devServerTarget": "alpdeskfee-client:serve:production"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "alpdeskfee-client"
+  "defaultProject": "alpdeskfee-client",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
