@@ -1,4 +1,4 @@
-import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {fromEvent, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ElementPosition} from '../interfaces/element-position';
@@ -6,7 +6,7 @@ import {ElementPosition} from '../interfaces/element-position';
 @Directive({
     selector: '[appItemBar]'
 })
-export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
+export class ItemBarDirective implements AfterViewInit, OnDestroy {
 
     @Input() frameContentDocument!: HTMLDocument;
     @Input() selectedElement!: HTMLElement;
@@ -28,13 +28,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
         this.stickyItemBar();
         this.draggableElement();
-
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-
-        // Not working in Safari. It seems to be a problem when the bar is change by Directive at first creation
-        // this.positionStickyElement();
 
     }
 
@@ -92,12 +85,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
         this.frameScrollSubscription = frameScrollEvent$.subscribe(() => {
 
             if (this.frameContentDocument !== undefined && this.frameContentDocument !== null) {
-                let scrollValue = 0;
-                if (this.frameContentDocument.scrollingElement) {
-                    scrollValue = this.frameContentDocument.scrollingElement.scrollTop;
-                } else if (this.frameContentDocument.documentElement.scrollTop) {
-                    scrollValue = this.frameContentDocument.documentElement.scrollTop;
-                }
                 this.positionStickyElement();
             }
 
