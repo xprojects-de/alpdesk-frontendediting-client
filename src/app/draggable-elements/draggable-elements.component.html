@@ -1,5 +1,4 @@
-
-<button [style.float]="'right'" mat-button mat-dialog-close>
+<button [style.float]="'right'" mat-button mat-dialog-close="">
     <mat-icon>close</mat-icon>
 </button>
 
@@ -10,10 +9,14 @@
 
             <h3>{{groupItem.label}}</h3>
 
-            <div *ngFor="let item of groupItem.items" draggable="true" (dragstart)="dragStart($event, item.key)"
-                 class="draggableElementsItem">
-                {{ item.label }}
-            </div>
+            <mat-chip-list>
+
+                <mat-chip *ngFor="let item of groupItem.items" draggable="true"
+                          (dragstart)="dragStart($event, item.key)" class="draggableChip" color="accent" selected>
+                    {{ item.label }}
+                </mat-chip>
+
+            </mat-chip-list>
 
             <div class="draggableClear"></div>
 

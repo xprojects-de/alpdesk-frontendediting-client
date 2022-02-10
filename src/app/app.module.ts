@@ -35,6 +35,7 @@ import {ItemPasteAfterComponent} from './items/item-paste-after/item-paste-after
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ItemFilemanagementComponent} from './items/item-filemanagement/item-filemanagement.component';
 import {DraggableElementsComponent} from './draggable-elements/draggable-elements.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
     declarations: [
@@ -74,7 +75,8 @@ import {DraggableElementsComponent} from './draggable-elements/draggable-element
         MatInputModule,
         FormsModule,
         MatProgressSpinnerModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatChipsModule
     ],
     providers: [],
     bootstrap: []
