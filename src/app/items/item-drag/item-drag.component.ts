@@ -8,6 +8,7 @@ import {BaseItemComponent} from '../base-item/base-item.component';
 })
 export class ItemDragComponent extends BaseItemComponent {
 
+    @Input() parentaccess = true;
     @Input() title = '';
     @Input() action = '';
     @Input() targetType = '';
@@ -20,23 +21,5 @@ export class ItemDragComponent extends BaseItemComponent {
 
     @Input() base = '';
     @Input() rt = '';
-
-    click(): void {
-
-        this.dispatchEvent({
-            preRequestPost: true,
-            rt: this.rt,
-            url: '/contao/alpdeskfee',
-            dialog: true,
-            action: this.action,
-            targetType: this.targetType,
-            do: this.do,
-            id: this.id,
-            pid: this.pid,
-            pageEdit: this.pageEdit,
-            pageId: this.pageId
-        });
-
-    }
 
 }

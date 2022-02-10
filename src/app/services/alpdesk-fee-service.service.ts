@@ -12,7 +12,6 @@ export class AlpdeskFeeServiceService {
 
     public static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
 
-    // tslint:disable-next-line:variable-name
     constructor(private _httpClient: HttpClient) {
     }
 
@@ -22,7 +21,6 @@ export class AlpdeskFeeServiceService {
         }));
     }
 
-    // tslint:disable-next-line:typedef
     private handleError<T>(result?: T) {
         return (error: any): Observable<T> => {
             console.log(error);
@@ -40,8 +38,6 @@ export class AlpdeskFeeServiceService {
         };
 
         const body = {data: JSON.stringify(data), rt: data.rt};
-        // console.log(body);
-        // console.log(url);
         const callError: CallError = {error: true};
 
         return this._httpClient.post(url, body, options).pipe(
@@ -52,7 +48,6 @@ export class AlpdeskFeeServiceService {
 
     callGetRequest(url: string): Observable<any> {
 
-        // console.log(url);
         const httpHeaders: HttpHeaders = new HttpHeaders({
             'Content-Type': 'text/plain'
         });

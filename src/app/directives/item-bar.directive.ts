@@ -1,4 +1,4 @@
-import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {fromEvent, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ElementPosition} from '../interfaces/element-position';
@@ -6,7 +6,7 @@ import {ElementPosition} from '../interfaces/element-position';
 @Directive({
     selector: '[appItemBar]'
 })
-export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
+export class ItemBarDirective implements AfterViewInit, OnDestroy {
 
     @Input() frameContentDocument!: HTMLDocument;
     @Input() selectedElement!: HTMLElement;
@@ -14,7 +14,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
     @Output() directiveChangePosition = new EventEmitter<ElementPosition>();
 
-    private element: HTMLElement;
+    private readonly element: HTMLElement;
     private sticky = false;
 
     private subscriptions: Subscription[] = [];
@@ -28,13 +28,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
         this.stickyItemBar();
         this.draggableElement();
-
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-
-        // Not working in Safari. It seems to be a problem when the bar is change by Directive at first creation
-        // this.positionStickyElement();
 
     }
 
@@ -89,15 +82,9 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
     stickyItemBar(): void {
 
         const frameScrollEvent$ = fromEvent<MouseEvent>(this.frameContentDocument, 'scroll');
-        this.frameScrollSubscription = frameScrollEvent$.subscribe((event: MouseEvent) => {
+        this.frameScrollSubscription = frameScrollEvent$.subscribe(() => {
 
             if (this.frameContentDocument !== undefined && this.frameContentDocument !== null) {
-                let scrollValue = 0;
-                if (this.frameContentDocument.scrollingElement) {
-                    scrollValue = this.frameContentDocument.scrollingElement.scrollTop;
-                } else if (this.frameContentDocument.documentElement.scrollTop) {
-                    scrollValue = this.frameContentDocument.documentElement.scrollTop;
-                }
                 this.positionStickyElement();
             }
 
@@ -105,13 +92,11 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
     }
 
-    // tslint:disable-next-line:typedef
     private getTransformMatrix(value: string) {
 
         if (value !== null && value !== undefined && value !== '') {
 
             const values = value.split(/\w+\(|\);?/);
-            // tslint:disable-next-line:radix
             const transform = values[1].split(/,\s?/g).map((numStr: string) => parseInt(numStr));
 
             return {x: transform[0], y: transform[1], z: transform[2]};
@@ -132,7 +117,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
             const dragEnd$ = fromEvent<MouseEvent>(this.frameContentDocument, 'mouseup');
             const drag$ = fromEvent<MouseEvent>(this.frameContentDocument, 'mousemove').pipe(takeUntil(dragEnd$));
 
-            // tslint:disable-next-line:one-variable-per-declaration
             let initialX: number, initialY: number, currentX = 0, currentY = 0;
             let dragSub!: Subscription;
 
@@ -149,7 +133,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
                 initialX = event.clientX - currentX;
                 initialY = event.clientY - currentY;
 
-                // tslint:disable-next-line:no-shadowed-variable
                 dragSub = drag$.subscribe((event: MouseEvent) => {
                     event.preventDefault();
                     currentX = event.clientX - initialX;

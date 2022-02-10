@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {Injector, NgModule} from '@angular/core';
-
+import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ItemContainerComponent} from './item-container/item-container.component';
@@ -35,7 +34,8 @@ import {ItemDragComponent} from './items/item-drag/item-drag.component';
 import {ItemPasteAfterComponent} from './items/item-paste-after/item-paste-after.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ItemFilemanagementComponent} from './items/item-filemanagement/item-filemanagement.component';
-import { DraggableElementsComponent } from './draggable-elements/draggable-elements.component';
+import {DraggableElementsComponent} from './draggable-elements/draggable-elements.component';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
     declarations: [
@@ -75,25 +75,24 @@ import { DraggableElementsComponent } from './draggable-elements/draggable-eleme
         MatInputModule,
         FormsModule,
         MatProgressSpinnerModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatChipsModule
     ],
-    // entryComponents: [AppComponent],
     providers: [],
-    // Bootstrapping is done int the ngDoBootstrap-Method
-    // bootstrap: []
-    // To develop locally enable this line!
-    // To Deploy disable this line
-    // bootstrap: [AppComponent]
+    bootstrap: []
 })
-export class AppModule {
-    constructor(private injector: Injector) {
+export class AppModule implements DoBootstrap {
 
+    constructor(private injector: Injector) {
     }
 
-    ngDoBootstrap(): void {
+    ngDoBootstrap(appRef: ApplicationRef): void {
 
-        const alpdeskfeecustom = createCustomElement(AppComponent, {injector: this.injector});
-        customElements.define('app-alpdeskfee', alpdeskfeecustom);
+        customElements.define('app-alpdeskfee', createCustomElement(AppComponent, {injector: this.injector}));
+
+        /*if (document.querySelectorAll('app-root')) {
+            appRef.bootstrap(AppComponent);
+        }*/
 
     }
 }

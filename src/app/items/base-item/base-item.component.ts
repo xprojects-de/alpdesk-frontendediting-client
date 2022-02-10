@@ -12,9 +12,11 @@ export class BaseItemComponent {
     }
 
     dispatchEvent(params: any): void {
+
         document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
             detail: params
         }));
+
     }
 
 }

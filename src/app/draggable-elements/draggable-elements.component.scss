@@ -1,34 +1,40 @@
 .draggableElementsContainer {
-  clear: both;
-  margin-top: 10px;
-  margin-bottom: 10px;
+    clear: both;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #0F1C26;
 }
 
 .draggableElementsGroup {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .draggableElementsGroup_inside {
-  padding: 10px;
+    padding: 10px;
 }
 
 .draggableElementsGroup h3 {
-  margin-bottom: 10px;
-  display: block;
+    margin-bottom: 10px;
+    display: block;
+    color: #fff;
 }
 
 .draggableClear {
-  clear: both;
+    clear: both;
 }
 
 .draggableElementsItem {
-  width: auto;
-  float: left;
-  padding: 5px 10px 5px 10px;
-  border: solid 1px #ccc;
-  text-align: center;
-  background: #fff;
-  margin-right: 10px;
-  cursor: move;
-  margin-bottom: 10px;
+    width: auto;
+    float: left;
+    padding: 5px 10px 5px 10px;
+    border: solid 1px #ccc;
+    text-align: center;
+    background: #fff;
+    margin-right: 10px;
+    cursor: move;
+    margin-bottom: 10px;
+}
+
+.draggableChip {
+    cursor: move;
 }

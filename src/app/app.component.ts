@@ -1,7 +1,6 @@
 import {
     AfterViewInit,
     Component,
-    ComponentFactoryResolver,
     ComponentRef,
     ElementRef,
     HostListener,
@@ -30,19 +29,20 @@ import {DraggableElementsComponent} from './draggable-elements/draggable-element
 })
 export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    // tslint:disable-next-line:max-line-length variable-name
-    constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService, public snackBar: MatSnackBar) {
+    constructor(
+        private _sanitizer: DomSanitizer,
+        private vcRef: ViewContainerRef,
+        private dialog: MatDialog,
+        private _alpdeskFeeService: AlpdeskFeeServiceService,
+        public snackBar: MatSnackBar
+    ) {
     }
 
     // Just for Testing - Will be as Input from Component
-    // tslint:disable-next-line:no-input-rename
-    @Input('base') base = 'https://contao.local:8890/';
-    // tslint:disable-next-line:no-input-rename
-    @Input('rt') rt = '8M62S3MloL-OpXm_bngrf7e-gqrchmjTSW9qhlcvbs8';
-    // tslint:disable-next-line:no-input-rename
-    @Input('frameurl') frameurl = '/preview.php';
-    // tslint:disable-next-line:no-input-rename
-    @Input('elements') elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
+    @Input() base = 'https://contao.local-latest:8890/';
+    @Input() rt = '01be14bdc.yCm3bKKSKIajjkV7IHVUVxUgQIq1IBDeaTd11yenmmU.5VHgDsOlGurktjYUU0EMFm0YF979E3jrJAMRsmSX2QKdUe8Px6tE0-DUAA';
+    @Input() frameurl = '/preview.php';
+    @Input() elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
 
     @ViewChild('alpdeskfeeframecontainer') alpdeskfeeframecontainer!: ElementRef;
     @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
@@ -57,13 +57,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     framecontainerInitHeightString = '500px';
     framecontainerDimension = '-';
     deviceselect = 'desktop';
-    // tslint:disable-next-line:variable-name
     phone_1 = 375;
-    // tslint:disable-next-line:variable-name
     phone_2 = 667;
-    // tslint:disable-next-line:variable-name
     tablet_1 = 760;
-    // tslint:disable-next-line:variable-name
     tablet_2 = 1024;
 
     frameUrlContent = '/preview.php';
@@ -71,10 +67,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     private subscriptions: Subscription[] = [];
     private elementsDialogOpened = false;
 
-    // tslint:disable-next-line:typedef
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
-
-        // console.log(event.detail);
 
         if (event.detail.preRequestGet !== null && event.detail.preRequestGet !== undefined && event.detail.preRequestGet === true) {
 
@@ -84,7 +77,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
                 (data) => {
 
-                    // console.log(data);
                     if (data.status !== 200) {
                         this.showSnackBar('An error has occurred');
                     }
@@ -93,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.showSnackBar(event.detail.snackMsg);
                     }
 
-                    if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag === true) {
+                    if (params.updateBag !== undefined && params.updateBag !== null && params.updateBag) {
                         this.updateFromContaoBag(params);
                     } else {
                         document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
@@ -110,16 +102,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             );
 
-            // tslint:disable-next-line:max-line-length
         } else if (event.detail.preRequestPost !== null && event.detail.preRequestPost !== undefined && event.detail.preRequestPost === true) {
 
             const params = event.detail;
             params.preRequestPost = false;
 
-            this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(
-                (data) => {
+            this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(() => {
 
-                    // console.log(data);
                     if (params.snackMsg !== undefined && params.snackMsg !== null && params.snackMsg !== '') {
                         this.showSnackBar(event.detail.snackMsg);
                     }
@@ -161,13 +150,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
                 (clipboard: ContaoClipboardCommon) => {
 
-                    // console.log(clipboard);
                     if (clipboard !== null && clipboard !== undefined) {
                         // parse tl_content clipboard
                         if (clipboard.tl_content !== null && clipboard.tl_content !== undefined) {
                             if (clipboard.tl_content.id !== 0) {
 
-                                // tslint:disable-next-line:max-line-length
                                 if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
                                     this.compRef.instance.setPasteAfterId(clipboard.tl_content.id);
                                     this.compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
@@ -207,10 +194,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             updateContentRecords: true
         };
 
-        this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
-            (bag: any) => {
+        this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(() => {
 
-                // console.log(bag);
                 document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
                     detail: params
                 }));
@@ -239,18 +224,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.alpdeskfeeframecontainer !== null && this.alpdeskfeeframecontainer !== undefined) {
 
-            // tslint:disable-next-line:max-line-length
             this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
-            // tslint:disable-next-line:max-line-length
-            const framecontainerMouseover$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, 'mouseover').subscribe((event: Event) => {
-                // tslint:disable-next-line:max-line-length
+
+            const framecontainerMouseover$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, 'mouseover').subscribe(() => {
                 this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
             });
 
             this.subscriptions.push(framecontainerMouseover$);
-            // tslint:disable-next-line:max-line-length
-            const framecontainerMouseout$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, 'mouseout').subscribe((event: Event) => {
-                // tslint:disable-next-line:max-line-length
+            const framecontainerMouseout$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, 'mouseout').subscribe(() => {
                 this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
             });
 
@@ -277,24 +258,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.deviceselect === 'phone') {
 
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_1 + 'px';
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_2 ? this.framecontainerInitHeight : this.phone_2) + 'px';
 
             } else if (this.deviceselect === 'phone_landscape') {
 
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_1 ? this.framecontainerInitHeight : this.phone_1) + 'px';
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_2 + 'px';
 
             } else if (this.deviceselect === 'tablet') {
 
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_1 + 'px';
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.tablet_2 ? this.framecontainerInitHeight : this.tablet_2) + 'px';
 
             } else if (this.deviceselect === 'tablet_landscape') {
 
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.framecontainerInitHeight ? this.framecontainerInitHeight : this.tablet_1) + 'px';
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_2 + 'px';
 
@@ -305,7 +282,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             }
 
-            // tslint:disable-next-line:max-line-length
             this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
 
         }
@@ -330,14 +306,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             data: dialogData
         });
 
-        dialogRef.afterClosed().subscribe(result => {
+        dialogRef.afterClosed().subscribe(() => {
             this.reloadIframe();
         });
     }
 
     openDialogElements(): void {
 
-        if (this.elementsDialogOpened === false) {
+        if (!this.elementsDialogOpened) {
 
             const dialogPosition: DialogPosition = {
                 top: '0px',
@@ -355,7 +331,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             this.elementsDialogOpened = true;
 
-            dialogRef.afterClosed().subscribe(result => {
+            dialogRef.afterClosed().subscribe(() => {
                 this.elementsDialogOpened = false;
             });
 
@@ -434,7 +410,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
                 if (closestElement !== null && closestElement !== undefined) {
-                    // tslint:disable-next-line:no-shadowed-variable
+
                     const jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
                     if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
                         const objElement = JSON.parse(jsonDataElement);
@@ -461,11 +437,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             const frameContentWindow = this.alpdeskfeeframe.nativeElement.contentWindow;
             const frameContentDocument = this.alpdeskfeeframe.nativeElement.contentDocument;
 
-            // tslint:disable-next-line:max-line-length
             if (frameContentWindow !== null && frameContentWindow !== undefined && frameContentDocument !== null && frameContentDocument !== undefined) {
 
-                const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
-                this.compRef = this.vcRef.createComponent(compFactory);
+                this.compRef = this.vcRef.createComponent(ItemContainerComponent);
                 this.compRef.instance.frameContentDocument = frameContentDocument;
                 this.compRef.instance.base = this.base;
                 this.compRef.instance.rt = this.rt;
@@ -493,7 +467,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                                     parentNode.style.minHeight = '50px';
                                     parentNode.classList.add('alpdeskfee-article-container');
-                                    const parentClick$ = fromEvent<MouseEvent>(parentNode, 'click').subscribe((event: Event) => {
+                                    const parentClick$ = fromEvent<MouseEvent>(parentNode, 'click').subscribe(() => {
                                         if (parentNode !== null) {
                                             this.compRef.instance.changeParent(obj, parentNode);
                                             this.compRef.changeDetectorRef.detectChanges();
@@ -506,13 +480,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                             } else {
 
                                 e.classList.add('alpdeskfee-ce-container');
-                                const elementMouseover$ = fromEvent<MouseEvent>(e, 'mouseover').subscribe((event: Event) => {
+                                const elementMouseover$ = fromEvent<MouseEvent>(e, 'mouseover').subscribe(() => {
                                     e.style.outline = '2px dashed rgb(244, 124, 0)';
                                     e.style.outlineOffset = '2px';
                                 });
                                 this.subscriptions.push(elementMouseover$);
 
-                                const elementMouseout$ = fromEvent<MouseEvent>(e, 'mouseout').subscribe((event: Event) => {
+                                const elementMouseout$ = fromEvent<MouseEvent>(e, 'mouseout').subscribe(() => {
                                     e.style.outline = '0px dashed rgb(244, 124, 0)';
                                     e.style.outlineOffset = '0px';
                                 });
@@ -553,8 +527,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                         event.preventDefault();
                                         event.stopPropagation();
 
-                                        // tslint:disable-next-line:max-line-length
-                                        if (event !== null && event !== undefined && event.dataTransfer !== null && event.dataTransfer !== undefined) {
+                                        if (event.dataTransfer !== null && event.dataTransfer !== undefined) {
 
                                             const eventData = event.dataTransfer.getData('type');
                                             document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {

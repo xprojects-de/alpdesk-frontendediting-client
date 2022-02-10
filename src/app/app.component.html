@@ -8,7 +8,7 @@
             <mat-option [value]="'phone_landscape'">Phone landscape</mat-option>
         </mat-select>
     </mat-form-field>
-    <button mat-button (click)="setDevice()">
+    <button mat-icon-button (click)="setDevice()">
         <mat-icon>important_devices</mat-icon>
     </button>
     &nbsp;|&nbsp;
@@ -17,11 +17,11 @@
     <mat-form-field>
         <input [(ngModel)]="frameUrlContent" matInput>
     </mat-form-field>
-    <button mat-button (click)="reloadIframeWithCondition()">
+    <button mat-icon-button (click)="reloadIframeWithCondition()">
         <mat-icon>refresh</mat-icon>
     </button>
     &nbsp;|&nbsp;
-    <button mat-button (click)="openDialogElements()">
+    <button mat-icon-button (click)="openDialogElements()" color="primary">
         <mat-icon>add</mat-icon>
     </button>
 </div>
