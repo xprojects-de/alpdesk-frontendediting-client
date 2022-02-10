@@ -33,8 +33,8 @@
      *ngIf="jsonDataParent !== null && jsonDataParent !== undefined && jsonDataParent.type === TARGETTYPE_ARTICLE && jsonDataParent.canEdit === true">
     <app-item-move></app-item-move>
     <app-item-desc
-            *ngIf="jsonDataParent.desc !== null && jsonDataParent.desc !== undefined && jsonDataParent.desc !== ''"
-            [label]="jsonDataParent.desc">
+        *ngIf="jsonDataParent.desc !== null && jsonDataParent.desc !== undefined && jsonDataParent.desc !== ''"
+        [label]="jsonDataParent.desc">
     </app-item-desc>
     <app-item-edit [title]="objLabels.article_all" [action]="ACTION_ELEMENT_EDIT" [targetType]="TARGETTYPE_ARTICLE"
                    [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pageEdit]="pageEdit" [pageId]="pageId">
@@ -79,8 +79,8 @@
      *ngIf="jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement.type === TARGETTYPE_CE">
     <app-item-move></app-item-move>
     <app-item-desc
-            *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
-            [label]="jsonDataElement.desc">
+        *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
+        [label]="jsonDataElement.desc">
     </app-item-desc>
     <app-item-overview *ngIf="jsonDataElement.canEdit === true" [parentaccess]="jsonDataElement.parentaccess"
                        [title]="objLabels.element_all" [action]="ACTION_PARENT_EDIT" [targetType]="TARGETTYPE_CE"
@@ -124,10 +124,10 @@
                   [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-new>
     <app-item-custom-module
-            *ngIf="jsonDataElement.act !== null && jsonDataElement.act !== undefined && jsonDataElement.act !== ''"
-            [title]="jsonDataElement.desc" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
-            [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit"
-            [pageId]="pageId">
+        *ngIf="jsonDataElement.act !== null && jsonDataElement.act !== undefined && jsonDataElement.act !== ''"
+        [title]="jsonDataElement.desc" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
+        [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit"
+        [pageId]="pageId">
     </app-item-custom-module>
     <app-item-paste-after *ngIf="jsonDataElement.canEdit === true" [parentaccess]="jsonDataElement.parentaccess"
                           [title]="objLabels.paste_element" [action]="ACTION_ELEMENT_PASTEAFTER"
@@ -151,21 +151,21 @@
      *ngIf="jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement.type === TARGETTYPE_MOD">
     <app-item-move></app-item-move>
     <app-item-desc
-            *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
-            [label]="jsonDataElement.desc">
+        *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
+        [label]="jsonDataElement.desc">
     </app-item-desc>
     <app-item-custom-module [title]="jsonDataElement.desc" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.do"
                             [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit"
                             [pageId]="pageId">
     </app-item-custom-module>
     <app-item-custom-module
-            *ngIf="jsonDataElement.act !== null && jsonDataElement.act !== undefined && jsonDataElement.act !== ''"
-            [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
-            [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit"
-            [pageId]="pageId">
+        *ngIf="jsonDataElement.act !== null && jsonDataElement.act !== undefined && jsonDataElement.act !== ''"
+        [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD" [do]="jsonDataElement.act"
+        [icon]="jsonDataElement.icon" [iconclass]="jsonDataElement.iconclass" [pageEdit]="pageEdit"
+        [pageId]="pageId">
     </app-item-custom-module>
     <ng-container
-            *ngIf="jsonDataElement.subviewitems !== null && jsonDataElement.subviewitems !== undefined && jsonDataElement.subviewitems.length > 0">
+        *ngIf="jsonDataElement.subviewitems !== null && jsonDataElement.subviewitems !== undefined && jsonDataElement.subviewitems.length > 0">
         <app-item-custom-module *ngFor="let item of jsonDataElement.subviewitems" [title]="objLabels.element_mod"
                                 [targetType]="TARGETTYPE_MOD" [do]="item.path" [icon]="item.icon"
                                 [iconclass]="item.iconclass"
