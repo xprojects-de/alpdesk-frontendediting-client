@@ -92,13 +92,11 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
 
     }
 
-    // tslint:disable-next-line:typedef
     private getTransformMatrix(value: string) {
 
         if (value !== null && value !== undefined && value !== '') {
 
             const values = value.split(/\w+\(|\);?/);
-            // tslint:disable-next-line:radix
             const transform = values[1].split(/,\s?/g).map((numStr: string) => parseInt(numStr));
 
             return {x: transform[0], y: transform[1], z: transform[2]};
@@ -119,7 +117,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
             const dragEnd$ = fromEvent<MouseEvent>(this.frameContentDocument, 'mouseup');
             const drag$ = fromEvent<MouseEvent>(this.frameContentDocument, 'mousemove').pipe(takeUntil(dragEnd$));
 
-            // tslint:disable-next-line:one-variable-per-declaration
             let initialX: number, initialY: number, currentX = 0, currentY = 0;
             let dragSub!: Subscription;
 
@@ -136,7 +133,6 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
                 initialX = event.clientX - currentX;
                 initialY = event.clientY - currentY;
 
-                // tslint:disable-next-line:no-shadowed-variable
                 dragSub = drag$.subscribe((event: MouseEvent) => {
                     event.preventDefault();
                     currentX = event.clientX - initialX;

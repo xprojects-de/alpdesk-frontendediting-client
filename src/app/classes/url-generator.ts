@@ -23,7 +23,6 @@ export class UrlGenerator {
             } else if (data.action === Constants.ACTION_ELEMENT_SHOW) {
                 url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&pn=' + data.pageId + '&rt=' + rt;
             } else if (data.action === Constants.ACTION_ELEMENT_NEW) {
-                // tslint:disable-next-line:max-line-length
                 url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&table=tl_content&id=' + data.id + '&act=create&mode=2&pid=' + data.id + '&rt=' + rt;
             }
 
@@ -34,7 +33,6 @@ export class UrlGenerator {
             } else if (data.action === Constants.ACTION_ELEMENT_EDIT) {
                 url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&table=tl_content&rt=' + rt + '&act=edit&id=' + data.id;
             } else if (data.action === Constants.ACTION_ELEMENT_NEW) {
-                // tslint:disable-next-line:max-line-length
                 url = '/contao?alpdeskmodal=1&popup=1&do=' + data.do + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + rt;
             }
 

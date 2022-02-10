@@ -28,7 +28,6 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
     url: any;
     showBack = false;
 
-    // tslint:disable-next-line:variable-name max-line-length
     constructor(private _sanitizer: DomSanitizer, public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) {
     }
 
@@ -62,7 +61,6 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     iframeLoad(): void {
 
-        // tslint:disable-next-line:max-line-length
         if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== undefined && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
 
             const currentURL: string = this.alpdeskfeemodalframe.nativeElement.contentWindow.location.href;
@@ -101,7 +99,6 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.showBack = false;
             }
 
-            // not so nice but currently working
             let validReloadResponse = true;
             if (this.saveNcloseUrl !== '') {
                 validReloadResponse = (this.saveNcloseUrl !== currentURL);
@@ -139,7 +136,6 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     back(): void {
 
-        // tslint:disable-next-line:max-line-length
         if (this.alpdeskfeemodalframe !== null && this.alpdeskfeemodalframe !== undefined && this.alpdeskfeemodalspinner !== null && this.alpdeskfeemodalspinner !== undefined) {
             if (this.history.length > 0) {
                 this.alpdeskfeemodalspinner.nativeElement.style.display = 'block';

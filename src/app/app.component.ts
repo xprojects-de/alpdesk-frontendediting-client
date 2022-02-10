@@ -69,8 +69,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
 
-        // console.log(event.detail);
-
         if (event.detail.preRequestGet !== null && event.detail.preRequestGet !== undefined && event.detail.preRequestGet === true) {
 
             const params = event.detail;
@@ -79,7 +77,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
                 (data) => {
 
-                    // console.log(data);
                     if (data.status !== 200) {
                         this.showSnackBar('An error has occurred');
                     }
@@ -105,7 +102,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             );
 
-            // tslint:disable-next-line:max-line-length
         } else if (event.detail.preRequestPost !== null && event.detail.preRequestPost !== undefined && event.detail.preRequestPost === true) {
 
             const params = event.detail;
@@ -154,13 +150,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(
                 (clipboard: ContaoClipboardCommon) => {
 
-                    // console.log(clipboard);
                     if (clipboard !== null && clipboard !== undefined) {
                         // parse tl_content clipboard
                         if (clipboard.tl_content !== null && clipboard.tl_content !== undefined) {
                             if (clipboard.tl_content.id !== 0) {
 
-                                // tslint:disable-next-line:max-line-length
                                 if (clipboard.tl_content.mode === Constants.CLIPBOARDMODE_COPY || clipboard.tl_content.mode === Constants.CLIPBOARDMODE_CUT) {
                                     this.compRef.instance.setPasteAfterId(clipboard.tl_content.id);
                                     this.compRef.instance.setPasteAfterMode(clipboard.tl_content.mode);
@@ -202,7 +196,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this._alpdeskFeeService.callPostRequest('/contao/alpdeskfee', data).subscribe(() => {
 
-                // console.log(bag);
                 document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
                     detail: params
                 }));
@@ -231,18 +224,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.alpdeskfeeframecontainer !== null && this.alpdeskfeeframecontainer !== undefined) {
 
-            // tslint:disable-next-line:max-line-length
             this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
-            // tslint:disable-next-line:max-line-length
+
             const framecontainerMouseover$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, 'mouseover').subscribe(() => {
-                // tslint:disable-next-line:max-line-length
                 this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
             });
 
             this.subscriptions.push(framecontainerMouseover$);
-            // tslint:disable-next-line:max-line-length
             const framecontainerMouseout$ = fromEvent<MouseEvent>(this.alpdeskfeeframecontainer.nativeElement, 'mouseout').subscribe(() => {
-                // tslint:disable-next-line:max-line-length
                 this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
             });
 
@@ -269,24 +258,20 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.deviceselect === 'phone') {
 
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_1 + 'px';
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_2 ? this.framecontainerInitHeight : this.phone_2) + 'px';
 
             } else if (this.deviceselect === 'phone_landscape') {
 
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.phone_1 ? this.framecontainerInitHeight : this.phone_1) + 'px';
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.phone_2 + 'px';
 
             } else if (this.deviceselect === 'tablet') {
 
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_1 + 'px';
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.tablet_2 ? this.framecontainerInitHeight : this.tablet_2) + 'px';
 
             } else if (this.deviceselect === 'tablet_landscape') {
 
-                // tslint:disable-next-line:max-line-length
                 this.alpdeskfeeframecontainer.nativeElement.style.height = (this.framecontainerInitHeight < this.framecontainerInitHeight ? this.framecontainerInitHeight : this.tablet_1) + 'px';
                 this.alpdeskfeeframecontainer.nativeElement.style.width = this.tablet_2 + 'px';
 
@@ -297,7 +282,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             }
 
-            // tslint:disable-next-line:max-line-length
             this.framecontainerDimension = this.alpdeskfeeframecontainer.nativeElement.offsetWidth + ' x ' + this.alpdeskfeeframecontainer.nativeElement.offsetHeight;
 
         }
@@ -426,7 +410,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
                 if (closestElement !== null && closestElement !== undefined) {
-                    // tslint:disable-next-line:no-shadowed-variable
+
                     const jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
                     if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
                         const objElement = JSON.parse(jsonDataElement);
@@ -453,7 +437,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             const frameContentWindow = this.alpdeskfeeframe.nativeElement.contentWindow;
             const frameContentDocument = this.alpdeskfeeframe.nativeElement.contentDocument;
 
-            // tslint:disable-next-line:max-line-length
             if (frameContentWindow !== null && frameContentWindow !== undefined && frameContentDocument !== null && frameContentDocument !== undefined) {
 
                 this.compRef = this.vcRef.createComponent(ItemContainerComponent);
@@ -544,7 +527,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                                         event.preventDefault();
                                         event.stopPropagation();
 
-                                        // tslint:disable-next-line:max-line-length
                                         if (event.dataTransfer !== null && event.dataTransfer !== undefined) {
 
                                             const eventData = event.dataTransfer.getData('type');

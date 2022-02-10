@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ApplicationRef, DoBootstrap, Injector, NgModule} from '@angular/core';
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ItemContainerComponent} from './item-container/item-container.component';
