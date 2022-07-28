@@ -28,7 +28,7 @@
 <div #alpdeskfeeframecontainer [style.resize]="'both'" [style.overflow]="'auto'" [style.maxWid]="'100%'"
      [style.border]="'1px solid #d0d0d2'"
      [style.backgroundColor]="'#ffffff'" [style.height]="framecontainerInitHeightString">
-    <iframe #alpdeskfeeframe [src]="url" width="100%" height="100%" (load)="iframeLoad()" frameborder="0"></iframe>
+    <iframe #alpdeskfeeframe [src]="url" width="100%" height="100%" (load)="iframeLoad()" style="border: 0;"></iframe>
 </div>
 <div #alpdeskfeeframespinner [style.position]="'absolute'" [style.top]="'0px'" [style.left]="'0px'"
      [style.width]="'100%'" [style.height]="'100%'" [style.opacity]="'1'" [style.textAlign]="'center'"
