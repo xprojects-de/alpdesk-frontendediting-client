@@ -34,7 +34,7 @@ jobs:
         if: success()
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r artifact/release_alpdeskfee-client_${{ steps.date.outputs.date }}.zip dist/elements
+          args: zip -qq -r artifact/release_alpdeskfee-client_${{ steps.date.outputs.date }}.zip elements
 
       - name: Upload
         if: success()
