@@ -47,19 +47,19 @@ export class ItemPasteAfterComponent extends BaseItemComponent implements OnChan
 
         if (this.pasteAfterMode === Constants.CLIPBOARDMODE_CUT) {
             // tslint:disable-next-line:max-line-length
-            if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_CE && this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id) && this.parentaccess === true) {
+            if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_CE && this.pasteafterid !== 0 && this.pasteafterid !== Number(this.id) && this.parentaccess) {
                 tmp = true;
                 // tslint:disable-next-line:max-line-length
-            } else if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_ARTICLE && this.pasteafterid !== 0 && this.parentaccess === true) {
+            } else if (this.pasteAfterTarget === Constants.CLIPBOARDMODE_PASTETARGET_ARTICLE && this.pasteafterid !== 0 && this.parentaccess) {
                 tmp = true;
             }
         } else if (this.pasteAfterMode === Constants.CLIPBOARDMODE_COPY) {
-            if (this.pasteafterid !== 0 && this.parentaccess === true) {
+            if (this.pasteafterid !== 0 && this.parentaccess) {
                 tmp = true;
             }
         }
 
-        if (tmp === true && this.pasteAfterPtable !== Constants.CLIPBOARDPTABLE_INVALID) {
+        if (tmp && this.pasteAfterPtable !== Constants.CLIPBOARDPTABLE_INVALID) {
             if (this.pasteAfterPtable !== this.do) {
                 tmp = false;
             }
