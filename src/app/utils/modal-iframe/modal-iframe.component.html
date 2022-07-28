@@ -10,5 +10,6 @@
         <mat-icon>keyboard_backspace</mat-icon>
     </button>
     <div [style.clear]="'both'" [style.marginBottom]="'5px'"></div>
-    <iframe #alpdeskfeemodalframe [src]="url" width="100%" height="90%" frameborder="0" (load)="iframeLoad()"></iframe>
+    <iframe #alpdeskfeemodalframe [src]="url" width="100%" height="90%" style="border: 0;"
+            (load)="iframeLoad()"></iframe>
 </div>

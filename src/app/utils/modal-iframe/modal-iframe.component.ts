@@ -93,11 +93,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
 
-            if (this.history.length > 1) {
-                this.showBack = true;
-            } else {
-                this.showBack = false;
-            }
+            this.showBack = (this.history.length > 1);
 
             let validReloadResponse = true;
             if (this.saveNcloseUrl !== '') {
@@ -106,7 +102,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
 
             this.saveNcloseUrl = currentURL;
 
-            if (this.saveNcloseTrigger === true && validReloadResponse === true) {
+            if (this.saveNcloseTrigger && validReloadResponse) {
                 this.dialogRef.close();
             } else {
 
@@ -116,7 +112,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const saveNClose: HTMLElement = this.alpdeskfeemodalframe.nativeElement.contentWindow.document.getElementById('saveNclose');
                 if (saveNClose !== null && saveNClose !== undefined) {
-                    this.saveNclose$ = fromEvent<MouseEvent>(saveNClose, 'click').subscribe((event: Event) => {
+                    this.saveNclose$ = fromEvent<MouseEvent>(saveNClose, 'click').subscribe(() => {
                         this.saveNcloseTrigger = true;
                         this.alpdeskfeemodalspinner.nativeElement.style.display = 'block';
                         this.alpdeskfeemodalframe.nativeElement.style.opacity = '0';
@@ -125,7 +121,7 @@ export class ModalIframeComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 const save: HTMLElement = this.alpdeskfeemodalframe.nativeElement.contentWindow.document.getElementById('save');
                 if (save !== null && save !== undefined) {
-                    this.save$ = fromEvent<MouseEvent>(save, 'click').subscribe((event: Event) => {
+                    this.save$ = fromEvent<MouseEvent>(save, 'click').subscribe(() => {
                         this.alpdeskfeemodalspinner.nativeElement.style.display = 'block';
                     });
                 }
