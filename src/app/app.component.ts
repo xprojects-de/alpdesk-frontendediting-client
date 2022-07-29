@@ -74,6 +74,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             const params = event.detail;
             params.preRequestGet = false;
 
+            // @TODO check when to unSubscribe
+
             this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
                 (data) => {
 
@@ -106,6 +108,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
             const params = event.detail;
             params.preRequestPost = false;
+
+            // @TODO check when to unSubscribe
 
             this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(() => {
 
