@@ -29,10 +29,9 @@ export class ItemPublishComponent extends BaseItemComponent {
         let url = '';
 
         if (this.targetType === Constants.TARGETTYPE_CE) {
-            // tslint:disable-next-line:max-line-length
-            url = '/contao?do=' + this.do + '&table=tl_content&id=' + this.pid + '&cid=' + this.id + '&state=' + (this.state ? 1 : 0) + '&rt=' + this.rt;
+            url = '/contao?do=' + this.do + '&table=tl_content&id=' + this.id + '&act=toggle&field=invisible&state=' + (this.state ? 1 : 0) + '&rt=' + this.rt;
         } else if (this.targetType === Constants.TARGETTYPE_ARTICLE) {
-            url = '/contao?do=' + this.targetType + '&tid=' + this.id + '&state=' + (this.state ? 1 : 0) + '&rt=' + this.rt;
+            url = '/contao?do=' + this.targetType + '&id=' + this.id + '&act=toggle&field=published&state=' + (this.state ? 1 : 0) + '&rt=' + this.rt;
         }
 
         return url;
