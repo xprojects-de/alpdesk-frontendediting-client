@@ -39,8 +39,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // Just for Testing - Will be as Input from Component
-    @Input() base = 'https://contao.local-latest:8890/';
-    @Input() rt = 'cff4580a718bdaf8e1dc1af7afd1a.vP91zbVgIE4-2jZtcrrX5-xEwVPskACUWRpA6avpL1U.0rcfjo0zT2NoqHIAK_-llr83gGWm93nialAN3u-YTjfvi0T62TFQAhO9Dg';
+    @Input() base = 'https://contao.local5.latest:8890/';
+    @Input() rt = '53bc969125344caf665bf37af5.GXmZC9M3gr2230f35zCOMYiIJn_oYByjkWYnFsGxkxs.egOoRqcGwOLVrAO-s0j_W-nPckmuDn7V-AAeJvDbyl5IFOg553TvzsWecw';
     @Input() frameurl = '/preview.php';
     @Input() elements = '{"Text-Elemente":[{"key":"headline","label":"\u00dcberschrift"},{"key":"text","label":"Text"},{"key":"html","label":"HTML"},{"key":"list","label":"Aufz\u00e4hlung"},{"key":"table","label":"Tabelle"},{"key":"code","label":"Code"},{"key":"markdown","label":"Markdown"}],"Akkordeon":[{"key":"accordionSingle","label":"Einzelelement"},{"key":"accordionStart","label":"Umschlag Anfang"},{"key":"accordionStop","label":"Umschlag Ende"}],"Content-Slider":[{"key":"sliderStart","label":"Umschlag Anfang"},{"key":"sliderStop","label":"Umschlag Ende"}],"Link-Elemente":[{"key":"hyperlink","label":"Hyperlink"},{"key":"toplink","label":"Top-Link"}],"Media-Elemente":[{"key":"image","label":"Bild"},{"key":"gallery","label":"Galerie"},{"key":"player","label":"Video\\/Audio"},{"key":"youtube","label":"YouTube"},{"key":"vimeo","label":"Vimeo"}],"Datei-Elemente":[{"key":"download","label":"Download"},{"key":"downloads","label":"Downloads"}],"Include-Elemente":[{"key":"article","label":"Artikel"},{"key":"alias","label":"Inhaltselement"},{"key":"form","label":"Formular"},{"key":"module","label":"Modul"},{"key":"teaser","label":"Artikelteaser"},{"key":"xproject_team","label":"xproject_team"},{"key":"xprojects_overview","label":"xprojects_overview"},{"key":"xprojects_detail","label":"xprojects_detail"},{"key":"rocksolid_slider","label":"rocksolid_slider"}],"Spaltenset":[{"key":"colsetStart","label":"Spaltenset Start"},{"key":"colsetPart","label":"Spaltenset Trennelemente"},{"key":"colsetEnd","label":"Spaltenset Endelement"}]}';
 
