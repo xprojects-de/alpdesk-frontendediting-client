@@ -10,8 +10,8 @@ import {
     ViewChild,
     ViewContainerRef
 } from '@angular/core';
-import {DialogPosition, MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {LegacyDialogPosition as DialogPosition, MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {DomSanitizer} from '@angular/platform-browser';
 import {fromEvent, Subscription} from 'rxjs';
 import {Constants} from './classes/constants';

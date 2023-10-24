@@ -17,25 +17,25 @@ import {ItemArticleComponent} from './items/item-article/item-article.component'
 import {ItemCustomModuleComponent} from './items/item-custom-module/item-custom-module.component';
 import {ItemMoveComponent} from './items/item-move/item-move.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
 import {ModalIframeComponent} from './utils/modal-iframe/modal-iframe.component';
 import {createCustomElement} from '@angular/elements';
 import {HttpClientModule} from '@angular/common/http';
 import {ItemBarDirective} from './directives/item-bar.directive';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatIconModule} from '@angular/material/icon';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
+import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
+import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
 import {FormsModule} from '@angular/forms';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
 import {ItemCutComponent} from './items/item-cut/item-cut.component';
 import {ItemDragComponent} from './items/item-drag/item-drag.component';
 import {ItemPasteAfterComponent} from './items/item-paste-after/item-paste-after.component';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
 import {ItemFilemanagementComponent} from './items/item-filemanagement/item-filemanagement.component';
 import {DraggableElementsComponent} from './draggable-elements/draggable-elements.component';
-import {MatChipsModule} from '@angular/material/chips';
+import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
 
 @NgModule({
     declarations: [
