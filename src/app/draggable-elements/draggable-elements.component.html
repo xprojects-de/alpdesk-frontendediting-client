@@ -9,14 +9,14 @@
 
             <h3>{{groupItem.label}}</h3>
 
-            <mat-chip-list>
+            <mat-chip-listbox>
 
                 <mat-chip *ngFor="let item of groupItem.items" draggable="true"
                           (dragstart)="dragStart($event, item.key)" class="draggableChip" color="accent" selected>
                     {{ item.label }}
                 </mat-chip>
 
-            </mat-chip-list>
+            </mat-chip-listbox>
 
             <div class="draggableClear"></div>
 
